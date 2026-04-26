@@ -6,15 +6,15 @@
   <!-- ===== SEO 基本メタタグ ===== -->
   <title>千葉のボイトレ教室｜SHION Vocal Studio【千葉駅・稲毛駅前・オンライン】</title>
   <meta name="description" content="千葉駅・稲毛駅前で通えるマンツーマンのボイストレーニング教室。初心者〜プロ志向まで歓迎。体験レッスン3,000円。高音が出ない・喉が疲れる・音程が不安定などの悩みを解決。オンラインレッスンも全国対応。講師SHIONが一人ひとりに寄り添って指導します。">
-  <meta name="keywords" content="ボイストレーニング 千葉,ボイトレ 千葉駅,ボイトレ 稲毛,声楽教室 千葉,歌 上手くなりたい,高音 出ない,マンツーマン ボイトレ,オンライン ボイトレ,SHION ボイストレーニング">
+  <meta name="keywords" content="ボイストレーニング 千葉,ボイトレ 千葉駅,ボイトレ 稲毛,ボイストレーニング 稲毛,声楽教室 千葉,歌 上手くなりたい,高音 出ない,マンツーマン ボイトレ,オンライン ボイトレ,SHION ボイストレーニング">
   <meta name="author" content="SHIONボイストレーニング教室">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://lit.link/shion_voicetraining">
+  <link rel="canonical" href="https://shion-voicetraining.github.io/">
   <!-- ===== OGP（Facebook・LINE プレビュー用） ===== -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="千葉のボイトレ教室｜SHION Vocal Studio">
   <meta property="og:description" content="「歌えない」が「歌える！」に変わる。千葉駅・稲毛駅前のマンツーマンボイトレ教室。体験レッスン3,000円。オンライン全国対応。">
-  <meta property="og:url" content="https://lit.link/shion_voicetraining">
+  <meta property="og:url" content="https://shion-voicetraining.github.io/">
   <meta property="og:image" content="./shion_profile.jpg">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:site_name" content="SHIONボイストレーニング教室">
@@ -23,22 +23,30 @@
   <meta name="twitter:title" content="千葉のボイトレ教室｜SHION Vocal Studio">
   <meta name="twitter:description" content="「歌えない」が「歌える！」に変わる。千葉駅・稲毛駅前のマンツーマンボイトレ。体験3,000円・オンライン全国対応。">
   <meta name="twitter:image" content="./shion_profile.jpg">
-  <!-- ===== JSON-LD 構造化データ（LocalBusiness + FAQPage） ===== -->
+  <!-- ===== JSON-LD 構造化データ（MusicSchool + FAQPage） ===== -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "MusicSchool",
     "name": "SHIONボイストレーニング教室",
+    "alternateName": "SHION Vocal Studio",
     "description": "千葉駅・稲毛駅前で通えるマンツーマンのボイストレーニング教室。初心者からプロ志向まで対応。オンラインレッスンも全国対応。",
-    "url": "https://lit.link/shion_voicetraining",
+    "url": "https://shion-voicetraining.github.io/",
     "telephone": "",
     "email": "shion.vocal@gmail.com",
+    "image": "https://shion-voicetraining.github.io/shion_profile.jpg",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "中央区富士見1-2-3",
+      "postalCode": "260-0015",
       "addressLocality": "千葉市",
       "addressRegion": "千葉県",
       "addressCountry": "JP"
     },
+    "areaServed": [
+      {"@type": "City", "name": "千葉市"},
+      {"@type": "AdministrativeArea", "name": "千葉県"}
+    ],
     "geo": {
       "@type": "GeoCoordinates",
       "latitude": 35.6134,
@@ -106,6 +114,22 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "J-POP・洋楽・アニソン・ジャズなどジャンルは問いません。あなたが歌いたい曲を使ってレッスンします。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "千葉駅・稲毛駅からアクセスは便利ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。千葉駅前スタジオ、稲毛駅前スタジオとも駅から徒歩圏内の好立地です。お仕事帰りや学校帰りにも通いやすく、千葉駅・稲毛駅周辺でボイトレ教室をお探しの方に最適です。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "千葉市以外からも通っている方はいますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。千葉市中央区・稲毛区はもちろん、美浜区・花見川区・四街道・習志野・船橋方面からも通われています。遠方の方や忙しい方にはオンラインレッスンもご利用いただけます。"
         }
       }
     ]
@@ -428,6 +452,86 @@
     }
     h4.locations-title { font-size: 0.88rem; font-weight: 800; color: var(--deep); margin-bottom: 7px; }
     .pricing-locations p { font-size: 0.86rem; color: #7a5068; line-height: 1.9; }
+    /* ===== アクセス ===== */
+    #access { background: #fff; }
+    .access-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .access-card {
+      background: var(--light);
+      border-radius: 18px;
+      padding: 24px 22px;
+      border: 1.5px solid rgba(232,98,154,0.13);
+      box-shadow: 0 2px 10px rgba(232,98,154,0.06);
+    }
+    h3.access-card-title {
+      font-size: clamp(1rem, 3vw, 1.1rem);
+      font-weight: 900;
+      color: var(--deep);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .access-card-title .station-pin {
+      background: var(--grad);
+      color: #fff;
+      width: 28px; height: 28px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.88rem;
+    }
+    .access-card p { font-size: 0.88rem; color: #5a3a4a; line-height: 1.85; margin-bottom: 6px; }
+    .access-card .access-addr {
+      font-size: 0.82rem; color: #7a5068;
+      background: #fff; padding: 8px 12px; border-radius: 8px;
+      margin-top: 10px; border: 1px dashed rgba(232,98,154,0.2);
+    }
+    .access-map-link {
+      display: flex; align-items: center; gap: 16px;
+      margin-top: 22px;
+      background: linear-gradient(135deg, #fff5f9 0%, #fce8f2 100%);
+      border-radius: 18px;
+      padding: 22px 26px;
+      border: 1.5px solid rgba(232,98,154,0.18);
+      box-shadow: 0 3px 14px rgba(232,98,154,0.08);
+      text-decoration: none;
+      color: var(--deep);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .access-map-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232,98,154,0.18);
+    }
+    .access-map-icon {
+      flex-shrink: 0;
+      width: 56px; height: 56px; border-radius: 14px;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 3px 12px rgba(232,98,154,0.25);
+    }
+    .access-map-text { flex: 1; }
+    .access-map-text p { font-size: 0.82rem; color: #7a5068; line-height: 1.7; margin: 0; }
+    .access-map-text strong { font-size: 0.98rem; color: var(--deep); display: block; margin-bottom: 2px; font-weight: 800; }
+    .access-map-arrow {
+      font-size: 1.3rem; color: var(--rose); flex-shrink: 0;
+    }
+    .access-note-box {
+      margin-top: 22px;
+      background: var(--grad2);
+      border-radius: 14px;
+      padding: 18px 22px;
+      border: 1.5px solid rgba(232,98,154,0.13);
+    }
+    .access-note-box p {
+      font-size: 0.88rem; color: var(--deep); line-height: 1.9; font-weight: 600;
+    }
+    @media (max-width: 640px) {
+      .access-grid { grid-template-columns: 1fr; }
+      .access-map-link { padding: 18px 18px; gap: 12px; }
+      .access-map-icon { width: 48px; height: 48px; font-size: 1.5rem; }
+    }
     /* ===== 講師プロフィール ===== */
     #profile { background: var(--light); }
     .profile-card {
@@ -638,20 +742,20 @@
 <!-- ===== ヒーロー ===== -->
 <section id="hero" aria-label="メインビジュアル">
   <div class="hero-inner">
-    <p class="hero-brand">SHIONボイストレーニング教室 ― Free Your Voice ♪</p>
+    <p class="hero-brand">千葉駅・稲毛駅前のSHIONボイストレーニング教室 ― Free Your Voice ♪</p>
     <img
       src="./shion_profile.jpg"
-      alt="SHIONボイストレーニング教室 講師SHION"
+      alt="千葉・稲毛のボイストレーニング教室 SHION Vocal Studio 講師SHION"
       class="hero-avatar"
       width="120" height="120"
       fetchpriority="high"
     >
     <h1 class="hero-catch">
-      <span class="small">「歌えない」が</span>
+      <span class="small">千葉・稲毛のボイトレ教室。「歌えない」が</span>
       「歌える！」に変わる
     </h1>
     <p class="hero-sub">
-      千葉駅・稲毛駅前のマンツーマン専門ボイトレ教室。<br>
+      <strong>千葉駅・稲毛駅前</strong>のマンツーマン専門ボイトレ教室。<br>
       大人の方を中心に、10代〜シニアまで。初心者大歓迎！<br>
       オンラインレッスンも全国対応しています。
     </p>
@@ -671,7 +775,7 @@
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">WORRY</div>
-      <h2 class="section-title" id="worries-title">こんなお悩み、ありませんか？</h2>
+      <h2 class="section-title" id="worries-title">千葉・稲毛でボイトレを探す方の、こんなお悩み</h2>
       <p class="section-lead">ひとつでも当てはまるなら、体験レッスンで解決できます。</p>
       <div class="divider" aria-hidden="true"></div>
     </div>
@@ -904,6 +1008,57 @@
     </div>
   </div>
 </section>
+<!-- ===== アクセス（ローカルSEO強化セクション） ===== -->
+<section id="access" aria-labelledby="access-title">
+  <div class="section-inner">
+    <div class="fade-up">
+      <div class="section-tag">ACCESS</div>
+      <h2 class="section-title" id="access-title">千葉駅・稲毛駅前スタジオへのアクセス</h2>
+      <p class="section-lead">
+        SHIONボイストレーニング教室は、<strong>JR千葉駅・JR稲毛駅から徒歩5分以内</strong>の駅チカ立地。<br>
+        千葉市中央区・稲毛区でボイトレ教室をお探しの方に通いやすい場所で開講しています。
+      </p>
+      <div class="divider" aria-hidden="true"></div>
+    </div>
+    <div class="access-grid fade-up">
+      <div class="access-card">
+        <h3 class="access-card-title">
+          <span class="station-pin" aria-hidden="true">🚉</span>
+          千葉駅前スタジオ
+        </h3>
+        <p>JR千葉駅から徒歩圏内のリハーサルスタジオ。JR総武線・京葉線・外房線・内房線・千葉都市モノレール・京成千葉線の各線が乗り入れる千葉市中央区の中心地。お仕事帰り・お買い物帰りにも立ち寄りやすい立地です。</p>
+        <p class="access-addr">📮 〒260-0015 千葉県千葉市中央区富士見1-2-3 周辺<br>※正確な住所はご予約時にご案内します</p>
+      </div>
+      <div class="access-card">
+        <h3 class="access-card-title">
+          <span class="station-pin" aria-hidden="true">🚉</span>
+          稲毛駅前スタジオ
+        </h3>
+        <p>JR稲毛駅から徒歩圏内のリハーサルスタジオ。千葉市稲毛区エリアにお住まいの方や、総武線・京浜東北線沿線（西千葉・幕張方面）からのアクセスも良好。地元の「稲毛でボイトレ教室を探している」方にも通いやすい環境です。</p>
+        <p class="access-addr">📮 千葉県千葉市稲毛区（JR稲毛駅徒歩圏内）<br>※正確な住所はご予約時にご案内します</p>
+      </div>
+    </div>
+    <a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%83%E8%91%89%E7%9C%8C%E5%8D%83%E8%91%89%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%AF%8C%E5%A3%AB%E8%A6%8B"
+       class="access-map-link fade-up"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Googleマップでスタジオの場所を確認">
+      <div class="access-map-icon" aria-hidden="true">🗺</div>
+      <div class="access-map-text">
+        <strong>Googleマップで場所を確認</strong>
+        <p>千葉駅前・稲毛駅前エリアの詳細マップをタップで表示します</p>
+      </div>
+      <div class="access-map-arrow" aria-hidden="true">→</div>
+    </a>
+    <div class="access-note-box fade-up">
+      <p>
+        🗺 <strong>対応エリア：</strong>千葉市中央区・稲毛区・美浜区・花見川区を中心に、
+        四街道・習志野・船橋・千葉駅・稲毛駅・西千葉・幕張・海浜幕張方面からも多く通われています。<br>
+        💻 <strong>オンラインレッスン</strong>は全国対応。遠方の方・お忙しい方も気軽にどうぞ！
+      </p>
+    </div>
+  </div>
+</section>
 <!-- ===== 講師プロフィール ===== -->
 <section id="profile" aria-labelledby="profile-title">
   <div class="section-inner">
@@ -916,7 +1071,7 @@
       <div class="profile-img-wrap">
         <img
           src="./shion_profile.jpg"
-          alt="ボイストレーニング講師 SHION"
+          alt="千葉・稲毛のボイストレーニング講師 SHION"
           class="profile-img"
           width="160" height="160"
           loading="lazy"
@@ -929,7 +1084,7 @@
       </div>
       <div>
         <p class="profile-name">SHION</p>
-        <p class="profile-role">ボイストレーニング講師 / ボーカリスト</p>
+        <p class="profile-role">千葉・稲毛のボイストレーニング講師 / ボーカリスト</p>
         <div class="profile-students" role="list">
           <span class="student-chip" role="listitem">👩 生徒は女性が多め</span>
           <span class="student-chip" role="listitem">📊 平均年齢45歳前後</span>
@@ -942,7 +1097,7 @@
           </div>
           <div class="career-item">
             <span class="career-icon" aria-hidden="true">🏫</span>
-            <span>2016年より地元・千葉でボイストレーニング教室を開業。</span>
+            <span>2016年より地元・千葉（千葉駅前・稲毛駅前）でボイストレーニング教室を開業。</span>
           </div>
           <div class="career-item">
             <span class="career-icon" aria-hidden="true">📚</span>
@@ -1058,6 +1213,14 @@
       <div class="faq-item">
         <div class="faq-q">どんな方が通っていますか？</div>
         <div class="faq-a">メインは20〜60代の大人の方で、平均年齢は45歳前後です。趣味で楽しみたい方、カラオケをもっと上手くなりたい方、昔やっていた歌を再び楽しみたい方など目的は様々。特に女性の方が多く、和やかな雰囲気です。10代・小学高学年の方も受け入れており、「基礎からしっかり歌を学びたい」という方もお気軽にご相談ください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">千葉駅・稲毛駅からアクセスは便利ですか？</div>
+        <div class="faq-a">はい。千葉駅前スタジオ、稲毛駅前スタジオとも駅から徒歩圏内の好立地です。お仕事帰りや学校帰りにも通いやすく、千葉駅・稲毛駅周辺でボイトレ教室をお探しの方に最適です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">千葉市以外からも通っている方はいますか？</div>
+        <div class="faq-a">はい。千葉市中央区・稲毛区はもちろん、美浜区・花見川区・四街道・習志野・船橋方面からも通われています。遠方の方や忙しい方にはオンラインレッスンもご利用いただけます。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">体験レッスンはどんな内容ですか？</div>
