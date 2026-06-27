@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /index_old.html
+
+Sitemap: https://shion-voice.com/sitemap.xml
