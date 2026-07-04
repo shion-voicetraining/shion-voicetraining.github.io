@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>ストロー発声トレーナー β｜SHIONボイストレーニング教室</title>
+<meta name="theme-color" content="#f2ede8" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<!-- 生徒向け限定公開ツール。検索非登録（unlisted） -->
+<meta name="robots" content="noindex,nofollow" />
+<style>
+  :root{
+    --bg:#f2ede8; --surface:#f8f3ee; --card:#ffffff; --ink:#1a1714; --ink2:#06060e;
+    --muted:#7a6d64; --line:#e5ddd3;
+    --teal:#0891b2; --teal-l:#62c0d8; --wine:#b83060; --wine-d:#7d1a38; --pink:#e05c7a;
+    --amber:#b06800; --amber-l:#f5a623; --green:#1e7a42;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body,#root{height:100%;}
+  body{background:var(--bg);color:var(--ink);
+    font-family:'Hiragino Sans','Noto Sans JP',sans-serif;
+    -webkit-font-smoothing:antialiased;overscroll-behavior:none;line-height:1.6;}
+  #loading{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;background:var(--bg);color:var(--muted);font-size:14px;gap:12px;z-index:50;}
+  .spinner{width:28px;height:28px;border:2.5px solid rgba(176,104,0,0.15);
+    border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .app{max-width:520px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;
+    padding-bottom:calc(72px + env(safe-area-inset-bottom));}
+  .safety{position:sticky;top:0;z-index:20;background:#fbeef0;color:var(--wine-d);
+    border-bottom:1px solid #f2d6dc;font-size:12.5px;padding:8px 16px;text-align:center;font-weight:600;}
+  .head{padding:20px 18px 10px;}
+  .head h1{font-size:19px;letter-spacing:.02em;}
+  .head p{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .streak{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:var(--surface);
+    border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:12.5px;color:var(--ink);}
+  .streak b{color:var(--amber);font-size:14px;}
+
+  .screen{padding:6px 16px 24px;flex:1;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.02);}
+  .card h3{font-size:15px;margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+  .card p{font-size:13.5px;color:#332c26;}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;
+    color:#fff;letter-spacing:.03em;}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;
+    border:1px solid var(--line);color:var(--muted);background:var(--surface);}
+  .lead{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--amber);margin:18px 2px 8px;}
+  .lead.sub{color:var(--muted);}
+  .sectionNote{font-size:12px;color:var(--muted);margin:2px 2px 12px;}
+
+  table.bp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
+  table.bp th,table.bp td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+  table.bp th{background:var(--surface);color:var(--muted);font-weight:700;}
+
+  .step{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;
+    font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .step .b{flex:1;}
+  .step .b b{font-size:14px;}
+  .step .b span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;}
+
+  .check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:7px 0;}
+  .check .ic{color:var(--green);font-weight:900;flex:0 0 auto;}
+
+  details.tb{border:1px solid var(--line);border-radius:12px;margin-bottom:9px;background:var(--card);overflow:hidden;}
+  details.tb summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:13.5px;font-weight:700;
+    display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  details.tb summary::-webkit-details-marker{display:none;}
+  details.tb summary .arw{color:var(--muted);font-size:12px;transition:transform .2s;}
+  details.tb[open] summary .arw{transform:rotate(90deg);}
+  details.tb .body{padding:0 14px 13px;font-size:13px;color:#332c26;}
+  details.tb .body .why{color:var(--muted);}
+  details.tb .body .fix{margin-top:5px;}
+  details.tb .body .fix b{color:var(--green);}
+
+  .exhead{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+  .exhead .lv{font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px;color:#fff;}
+  .ex .goal{font-size:12.5px;color:var(--muted);margin:2px 0 8px;}
+  .ex .cue{font-size:12.5px;background:var(--surface);border-radius:10px;padding:9px 11px;margin-bottom:10px;}
+  .ex .cue b{color:var(--green);}
+  .ex .spec{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .btnrow{display:flex;gap:8px;}
+  button{font-family:inherit;font-size:14px;font-weight:700;border:none;border-radius:11px;
+    padding:11px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .btn-primary{background:var(--wine);color:#fff;flex:1;}
+  .btn-primary:active{background:var(--wine-d);}
+  .btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line);}
+  .btn-tone{background:var(--teal);color:#fff;}
+
+  .runner{text-align:center;padding:8px 0 2px;}
+  .runner .phase{font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
+  .runner .phase.work{color:var(--wine);}
+  .runner .phase.rest{color:var(--teal);}
+  .runner .phase.done{color:var(--green);}
+  .runner .big{font-size:52px;font-weight:800;line-height:1.1;margin:2px 0;font-variant-numeric:tabular-nums;}
+  .runner .rep{font-size:13px;color:var(--muted);margin-bottom:12px;}
+  .ring{width:100%;height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin:6px 0 14px;}
+  .ring>i{display:block;height:100%;background:var(--wine);transition:width 1s linear;}
+  .runner .phase.rest ~ .ring>i,.ring.rest>i{background:var(--teal);}
+
+  .dynmeter{width:100%;height:16px;background:var(--line);border-radius:999px;overflow:hidden;}
+  .dynmeter>i{display:block;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,var(--amber-l),var(--wine));transition:width .9s linear;}
+
+  .round{width:100%;text-align:left;margin-bottom:8px;border:1px solid var(--line);border-radius:12px;
+    padding:12px 13px;display:flex;gap:10px;align-items:flex-start;color:var(--ink);}
+
+  @keyframes bubbleUp{0%{transform:translateY(0);opacity:0;}
+    20%{opacity:.95;}100%{transform:translateY(-44px);opacity:0;}}
+  .bub{animation:bubbleUp 2s ease-in infinite;}
+
+  nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(248,243,238,.94);
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom);}
+  nav .inner{max-width:520px;margin:0 auto;display:flex;}
+  nav button{flex:1;background:none;border:none;border-radius:0;padding:10px 4px;color:var(--muted);
+    font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  nav button .ic{font-size:19px;line-height:1;}
+  nav button.on{color:var(--wine);}
+  .foot{font-size:11px;color:var(--muted);text-align:center;padding:18px 20px 8px;line-height:1.7;}
+</style>
+</head>
+<body>
+<div id="loading"><div class="spinner"></div><span>読み込み中…</span></div>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const {useState, useRef, useEffect} = React;
+
+/* ═══════════════════════════════════════════════════════════════
+   ストロー発声トレーナー（SOVT / SVOT）— SHIONボイストレーニング教室
+   単一HTML + React(CDN) + Web Audio。ハモリトレーナーと同構成。
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- Why：なぜSVOTが良いのか（メイン＝正しい発声／サブ＝予防） ---------- */
+const WHY_MAIN = [
+  {t:"SVOT（ストロー発声）で“正しい発声”が楽に身につく",
+   d:"SVOT＝半閉鎖声道エクササイズ。ストローで声道を軽く塞ぐと「背圧」が生まれ、声帯が最小限の力で効率よく振動します。力まずに鳴らす感覚を体で覚えられる＝正しい発声への一番の近道です。"},
+  {t:"なぜ効くの？（背圧のしくみ）",
+   d:"声門の上下の圧が均衡し、声帯の衝突をやわらげながら効率よく発声できます。発声に必要な最小の圧（PTP）が下がり、「あ、楽に鳴る」を体感できるのがポイント。音声科学者 Ingo Titze が理論を確立しました。"},
+];
+const WHY_SUB = [
+  {t:"だから、声を疲れさせない・守れる",
+   d:"声帯は歌っている間、1秒に数百回も左右がぶつかっています。力任せの発声を続けると負担が積み重なることも。ウォームアップやクールダウンにSVOTを習慣化すれば、声のコンディションを保つケアになります。（※医療行為ではなく、あくまでセルフケアの補助です）"},
+];
+
+/* ---------- ストローの太さ（入手しやすい実物ベースの3段階） ---------- */
+const STRAWS = [
+  {key:"tapioca", name:"太（タピオカ）", dia:"約10〜12mm", mm:11, color:"#1e7a42",
+   bp:"ほぼ抵抗なし", load:"入門・低負荷",
+   where:"タピオカドリンク用の極太タイプ。息がラクに通るので、まずコレで“息を通して声を乗せる”感覚づくりから。"},
+  {key:"normal", name:"通常（ドリンク／コーヒー用）", dia:"約8mm", mm:8, color:"#b06800",
+   bp:"軽め", load:"身近な中間ステップ",
+   where:"家にある普通のドリンク用・コーヒー用ストローでOK。タピオカに慣れたら次はコレ。"},
+  {key:"thin", name:"細め", dia:"約4mm", mm:4, color:"#b83060",
+   bp:"しっかり", load:"トレーニング用",
+   where:"100均（ダイソー・セリア等）で“細いストロー／マドラーストロー”を探して購入。背圧が効いて負荷が上がる。"},
+];
+
+/* ---------- What：基本手順 ---------- */
+const STEPS = [
+  {t:"ストローを選ぶ", d:"まずは太め（タピオカ）。慣れたら通常のドリンク／コーヒー用（約8mm）→ 細め（4mm・100均で購入）へ段階を上げる。息が続かないときは太いものに戻してOK。"},
+  {t:"軽くくわえる", d:"口の端から息を漏らさない。歯や唇に力を入れず、ふわっと支える。"},
+  {t:"ロングトーン「ウー」", d:"ストローに息を通して一定の音で伸ばす。頬や唇に軽い圧・振動を感じればOK。"},
+  {t:"サイレン（音をなめらかに上下）", d:"低い音→高い音→低い音へ、救急車のサイレンのように滑らかに。声の切り替わり（換声点）も背圧が助けてくれる。"},
+  {t:"水ストロー（上級）", d:"コップの水に5〜10cm沈めて発声。泡が立つ＝強い抵抗。疲労回復・仕上げ向き。"},
+  {t:"時間の目安", d:"ウォームアップ2〜5分。高負荷は短く。喉が楽になる範囲で。痛みが出たら中止。"},
+];
+
+/* ---------- 判断ポイント：ちゃんと鳴らせているか ---------- */
+const CHECKS = [
+  "唇・頬・鼻のあたりに、軽い振動やくすぐったさを感じる",
+  "音が途切れず、一定の大きさで伸ばし続けられる",
+  "息がストローの先から一定に出ている（水ストローなら泡が一定の量で立つ）",
+  "喉がしめつけられず、むしろ“楽”に感じる",
+  "5〜10秒くらい、無理なく続けられる",
+];
+
+/* ---------- トラブルシュート：うまくいかないとき ---------- */
+const TROUBLES = [
+  {p:"息がすぐ切れる・続かない", why:"ストローが細くて抵抗が強すぎる、または息を一気に使いすぎ。",
+   fix:"太いストローに変える／ストローを2本まとめてくわえる／まず短い秒数から。息は“細く長く”。"},
+  {p:"音が出ない・かすれる", why:"くわえが浅い、または口の端から息が漏れている。",
+   fix:"唇でストローを（力まず）しっかり囲む。もっと軽い息でそっと鳴らしてみる。"},
+  {p:"頬がパンパンに膨らむ", why:"息を出しすぎ、または口の中にため込みすぎ。",
+   fix:"息を細く一定に。頬はゆるめたまま、喉から自然に流す意識で。"},
+  {p:"音が裏返る・不安定", why:"喉で押している（過緊張）サイン。",
+   fix:"太いストローに戻す／音量を落とす／低めの音域から。楽に鳴る太さまで下げてOK。"},
+  {p:"喉が痛い・違和感がある", why:"抵抗が強すぎる、またはやりすぎ。",
+   fix:"すぐ中止。細すぎるストローを避け、時間を短く。痛みが続く場合は専門家へ。"},
+  {p:"泡が出ない（水ストロー）", why:"沈めすぎ、または息が弱い。",
+   fix:"沈める深さを浅く（5cm）から。息を少し増やして一定に。"},
+  {p:"泡が飛び散る（水ストロー）", why:"息が強すぎる。",
+   fix:"息をゆるめて、泡の量が一定になるところを探す。"},
+];
+
+/* ---------- How：10本ラダー ---------- */
+const LV = {
+  beg:{name:"初級", color:"#1e7a42"},
+  mid:{name:"中級", color:"#b06800"},
+  adv:{name:"上級", color:"#b83060"},
+};
+// toneMode: hold / glideUpDown / glideUp / glide2oct / scale / swell / none
+// 特別フラグ: semitone(1回ごとに半音上げる) / dynamics(強弱メーター) / water(泡アニメ) / mode:"phrase"(カウントなし3回)
+const EXERCISES = [
+  {id:1, lv:"beg", title:"ロングトーン「ウー」", straw:"太（タピオカ）",
+   goal:"まず息を均一に通して、声を乗せる感覚をつかむ入口。",
+   cue:"頬に軽い振動を感じ、音が途切れず一定に伸びればOK。",
+   reps:3, workSec:10, restSec:8, toneHz:220, toneMode:"hold"},
+  {id:2, lv:"beg", title:"ゆるいサイレン（なめらか上下）", straw:"太（タピオカ）",
+   goal:"力まずに音を上下させる。救急車のサイレンを低くゆっくりにしたイメージ。",
+   cue:"低→高→低が滑らかに。喉で押さず、息で音が動く感じ。",
+   reps:4, workSec:8, restSec:6, toneHz:196, toneMode:"glideUpDown"},
+  {id:3, lv:"beg", title:"ロングトーン（通常8mm）", straw:"通常（ドリンク／コーヒー用・約8mm）",
+   goal:"タピオカより少し手応えのある“身近な標準”で伸ばす。",
+   cue:"頬と唇に軽い振動。喉はむしろ楽なのが正解。",
+   reps:3, workSec:12, restSec:8, toneHz:220, toneMode:"hold"},
+  {id:4, lv:"mid", title:"サイレン（1オクターブ上下）", straw:"通常（約8mm）",
+   goal:"換声点（声の切り替わり）を背圧の助けで滑らかに通過する。",
+   cue:"低音→高音→低音で音が途切れない。裏返りは力みのサイン。",
+   reps:5, workSec:8, restSec:6, toneHz:196, toneMode:"glideUpDown"},
+  {id:5, lv:"mid", title:"スケール（半音ずつ上げる）", straw:"通常（約8mm）",
+   goal:"ドレミを1回ごとに半音ずつ上げて、音域全体をならしていく。",
+   cue:"どの高さも同じ息の量・同じ圧で。基準音が1本ごとに半音上がります。",
+   reps:6, workSec:9, restSec:5, toneHz:175, toneMode:"scale", semitone:true},
+  {id:6, lv:"mid", title:"2オクターブ・サイレン", straw:"細め（4mm・100均）",
+   goal:"背圧を上げて音域を広げる。高音も背圧で楽に届かせる。",
+   cue:"高くなっても喉を締めない。届かなければ無理せず戻す。",
+   reps:4, workSec:10, restSec:8, toneHz:147, toneMode:"glide2oct"},
+  {id:7, lv:"mid", title:"メッサ・ディ・ヴォーチェ（強弱）", straw:"細め（4mm・100均）",
+   goal:"呼気圧のコントロール。1音の中で小さく→大きく→小さく。",
+   cue:"画面の山＝声を大きく。真ん中で最大、両端で最小。喉で押さず息の量で。",
+   reps:3, workSec:12, restSec:8, toneHz:220, toneMode:"swell", dynamics:true},
+  {id:8, lv:"adv", title:"水ストロー・ロングトーン（5cm）", straw:"細め4mm ＋ 水5cm",
+   goal:"泡＝抵抗を可視化しながら安定して伸ばす。",
+   cue:"泡が一定の量で立ち続ければ、息が一定な証拠。",
+   reps:3, workSec:12, restSec:10, toneHz:220, toneMode:"hold", water:true},
+  {id:9, lv:"adv", title:"水ストロー・サイレン（10cm）", straw:"細め4mm ＋ 水10cm",
+   goal:"高負荷（深め）でも音と泡を安定させる。",
+   cue:"上下させても泡の量を保つ。飛び散る＝息が強すぎ。",
+   reps:4, workSec:10, restSec:10, toneHz:196, toneMode:"glideUpDown", water:true},
+  {id:10, lv:"adv", title:"課題曲のサビを3回", straw:"通常（約8mm・歌い切れる太さで）",
+   goal:"今の練習曲のサビを3回。ストロー→ウー→歌詞で、楽な発声を歌に持ち込む仕上げ。",
+   cue:"3回とも同じ“楽さ”で歌えたら成功。喉が疲れないのが目安。",
+   mode:"phrase",
+   rounds:[
+     {n:"1回目", t:"ストローでサビを歌う", d:"ストローに息を通しながら、サビのメロディをなぞる。"},
+     {n:"2回目", t:"ストローを外して「ウー」", d:"同じサビを、口を軽くすぼめた「ウー」で。ストローの楽さを思い出す。"},
+     {n:"3回目", t:"歌詞で歌う", d:"そのまま歌詞で。1・2回目の“楽な鳴り”を保てたら成功。"},
+   ]},
+];
+
+/* ---------- Web Audio：お手本音 ---------- */
+function useAudio(){
+  const ctxRef = useRef(null);
+  const nodeRef = useRef(null); // {osc,gain}
+  function ensure(){
+    if(!ctxRef.current){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return null;
+      ctxRef.current = new AC();
+    }
+    if(ctxRef.current.state === "suspended") ctxRef.current.resume();
+    return ctxRef.current;
+  }
+  function stop(){
+    const n = nodeRef.current;
+    if(n){ try{ n.osc.stop(); }catch(e){} try{ n.osc.disconnect(); n.gain.disconnect(); }catch(e){} nodeRef.current=null; }
+  }
+  function play(hz, durSec, mode){
+    const ctx = ensure();
+    if(!ctx || !hz || mode==="none") return;
+    stop();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    const t0 = ctx.currentTime;
+    const f = osc.frequency;
+    if(mode==="glideUpDown"){
+      f.setValueAtTime(hz,t0);
+      f.linearRampToValueAtTime(hz*2, t0+durSec/2);
+      f.linearRampToValueAtTime(hz, t0+durSec);
+    } else if(mode==="glideUp"){
+      f.setValueAtTime(hz,t0);
+      f.linearRampToValueAtTime(hz*2, t0+durSec);
+    } else if(mode==="glide2oct"){
+      f.setValueAtTime(hz,t0);
+      f.linearRampToValueAtTime(hz*4, t0+durSec*0.6);
+      f.linearRampToValueAtTime(hz, t0+durSec);
+    } else if(mode==="scale"){
+      const ratios=[1, 9/8, 5/4, 4/3, 3/2, 4/3, 5/4, 9/8, 1];
+      const step = durSec/ratios.length;
+      ratios.forEach((r,i)=> f.setValueAtTime(hz*r, t0+i*step));
+    } else { // hold / swell（周波数は一定）
+      f.setValueAtTime(hz,t0);
+    }
+    if(mode==="swell"){
+      // 強弱お手本：小さく→大きく→小さく（クレッシェンド／デクレッシェンド）
+      gain.gain.setValueAtTime(0.02,t0);
+      gain.gain.linearRampToValueAtTime(0.22, t0+durSec/2);
+      gain.gain.linearRampToValueAtTime(0.02, t0+durSec);
+    } else {
+      gain.gain.setValueAtTime(0,t0);
+      gain.gain.linearRampToValueAtTime(0.16, t0+0.06);
+      gain.gain.setValueAtTime(0.16, Math.max(t0+0.06, t0+durSec-0.1));
+      gain.gain.linearRampToValueAtTime(0, t0+durSec);
+    }
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0+durSec+0.03);
+    nodeRef.current = {osc,gain};
+  }
+  useEffect(()=>()=>stop(),[]);
+  return {play, stop, ensure};
+}
+
+/* ---------- アクセス・フィードバック収集（GAS → Googleスプレッドシート） ---------- */
+// 既存2作（音楽クイズ・ハモリ）と同方式。GASのWebアプリURLを下に貼ると送信が有効になる。
+// 空欄のあいだは一切送信しない（＝プライバシー面で安全なデフォルト）。
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwZbWQgbUTr8Bop9pB1VTCSwUVkUS1JWerCrM7L1TW3dJklIlL03LiYUOMLU6EV5kxr/exec";
+function logEvent(type, payload){
+  if(!GOOGLE_SHEET_URL) return;
+  try{
+    fetch(GOOGLE_SHEET_URL, {
+      method:"POST", mode:"no-cors", keepalive:true,
+      headers:{"Content-Type":"text/plain;charset=utf-8"}, // CORSプリフライト回避のためtext/plain
+      body: JSON.stringify(Object.assign({type:type, ts:new Date().toISOString()}, payload||{}))
+    });
+  }catch(e){ /* 送信失敗はアプリ動作に影響させない */ }
+}
+
+/* ---------- 練習記録（localStorage・軽量ストリーク） ---------- */
+const LS_KEY = "straw_trainer_log_v1";
+function todayStr(){ return new Date().toLocaleDateString("sv-SE"); } // YYYY-MM-DD(ローカル)
+function loadLog(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {last:"", streak:0}; }
+  catch(e){ return {last:"", streak:0}; }
+}
+function markDone(){
+  const log = loadLog();
+  const today = todayStr();
+  if(log.last === today) return log; // 今日は記録済み
+  const yesterday = new Date(Date.now()-86400000).toLocaleDateString("sv-SE");
+  const next = {last:today, streak: log.last===yesterday ? (log.streak||0)+1 : 1};
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(next)); }catch(e){}
+  return next;
+}
+
+/* ---------- タイマー（1種目の実行） ---------- */
+function Runner({ex, audio, onDone}){
+  // st: {phase:'idle'|'work'|'rest'|'done', rep, sec}
+  const st = useRef({phase:"idle", rep:0, sec:0});
+  const [,setV] = useState(0);
+  const timerRef = useRef(null);
+  const render = ()=> setV(v=>v+1);
+
+  function clearTimer(){ if(timerRef.current){ clearInterval(timerRef.current); timerRef.current=null; } }
+
+  function repHz(rep){
+    // semitone: 1本ごとに半音（周波数比 2^(1/12)）上げる
+    return ex.semitone ? ex.toneHz * Math.pow(2,(rep-1)/12) : ex.toneHz;
+  }
+  function startWork(rep){
+    st.current = {phase:"work", rep, sec:ex.workSec};
+    audio.play(repHz(rep), ex.workSec, ex.toneMode);
+    render();
+  }
+  function tick(){
+    const s = st.current;
+    if(s.sec > 1){ st.current = {...s, sec:s.sec-1}; render(); return; }
+    // フェーズ終了
+    if(s.phase === "work"){
+      audio.stop();
+      if(s.rep >= ex.reps){
+        clearTimer();
+        st.current = {phase:"done", rep:s.rep, sec:0}; render();
+        onDone();
+        logEvent("complete", {id:ex.id, title:ex.title});
+      } else if(ex.restSec > 0){
+        st.current = {phase:"rest", rep:s.rep, sec:ex.restSec}; render();
+      } else {
+        startWork(s.rep+1);
+      }
+    } else if(s.phase === "rest"){
+      startWork(s.rep+1);
+    }
+  }
+  function begin(){
+    audio.ensure();      // ユーザー操作の中でAudioContextを起こす
+    clearTimer();
+    startWork(1);
+    timerRef.current = setInterval(tick, 1000);
+  }
+  function reset(){
+    clearTimer(); audio.stop();
+    st.current = {phase:"idle", rep:0, sec:0}; render();
+  }
+  useEffect(()=>()=>{ clearTimer(); audio.stop(); },[]);
+
+  const s = st.current;
+  if(s.phase === "idle"){
+    return (
+      <div className="btnrow">
+        <button className="btn-primary" onClick={begin}>▶ スタート（{ex.reps}本）</button>
+        {ex.toneMode!=="none" &&
+          <button className="btn-tone" onClick={()=>audio.play(ex.toneHz, Math.min(ex.workSec,6), ex.toneMode)}>♪ お手本</button>}
+      </div>
+    );
+  }
+  const total = s.phase==="rest" ? ex.restSec : ex.workSec;
+  const pct = total ? Math.round((s.sec/total)*100) : 0;
+  const phaseLabel = s.phase==="work" ? "発声" : s.phase==="rest" ? "休憩" : "完了";
+  return (
+    <div className="runner">
+      <div className={"phase "+s.phase}>{phaseLabel}</div>
+      {s.phase!=="done" ? (
+        <>
+          <div className="big">{s.sec}</div>
+          <div className="rep">
+            {s.rep} / {ex.reps} 本目
+            {ex.semitone && s.phase==="work" && <span style={{color:"var(--amber)",fontWeight:700}}>　♪ +{s.rep-1}半音</span>}
+          </div>
+          <div className={"ring"+(s.phase==="rest"?" rest":"")}><i style={{width:pct+"%"}}></i></div>
+          {ex.dynamics && s.phase==="work" && (function(){
+            const p = (ex.workSec - s.sec) / ex.workSec;      // 0→1
+            const inten = Math.max(0, 1 - Math.abs(2*p - 1));  // 三角波 0→1→0
+            const label = inten>0.66 ? "強く！" : inten>0.33 ? "だんだん…" : "弱く";
+            return (
+              <div style={{margin:"0 0 12px"}}>
+                <div style={{fontSize:"13px",fontWeight:800,color:"var(--wine)",marginBottom:"5px"}}>{label}</div>
+                <div className="dynmeter"><i style={{width:(18+inten*82)+"%"}}></i></div>
+                <div style={{fontSize:"11px",color:"var(--muted)",marginTop:"5px"}}>小 → 大 → 小（真ん中で最大）</div>
+              </div>
+            );
+          })()}
+          <div className="btnrow"><button className="btn-ghost" style={{flex:1}} onClick={reset}>■ ストップ</button></div>
+        </>
+      ) : (
+        <>
+          <div className="big" style={{fontSize:"38px"}}>お疲れさま！</div>
+          <div className="rep">今日の練習を記録しました 🎉</div>
+          <div className="btnrow"><button className="btn-ghost" style={{flex:1}} onClick={reset}>もう一度</button></div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ---------- 課題曲（カウントなし・サビ3回のチェック式） ---------- */
+function PhraseRunner({ex, onDone}){
+  const [done, setDone] = useState([false,false,false]);
+  const firedRef = useRef(false);
+  function toggle(i){
+    setDone(d=>{
+      const nd = d.slice(); nd[i] = !nd[i];
+      if(nd.every(Boolean) && !firedRef.current){
+        firedRef.current = true;
+        onDone();
+        logEvent("complete", {id:ex.id, title:ex.title});
+      }
+      return nd;
+    });
+  }
+  const allDone = done.every(Boolean);
+  return (
+    <div>
+      {ex.rounds.map((r,i)=>(
+        <button key={i} onClick={()=>toggle(i)} className="round"
+          style={{background: done[i] ? "#eaf6ee" : "var(--surface)",
+                  borderColor: done[i] ? "var(--green)" : "var(--line)"}}>
+          <span style={{color: done[i] ? "var(--green)" : "var(--muted)", fontWeight:900, fontSize:"16px"}}>{done[i] ? "✓" : "○"}</span>
+          <span>
+            <b style={{color: done[i] ? "var(--green)" : "var(--ink)"}}>{r.n}：{r.t}</b>
+            <span style={{display:"block",fontSize:"12px",color:"var(--muted)",fontWeight:400,marginTop:"2px"}}>{r.d}</span>
+          </span>
+        </button>
+      ))}
+      {allDone && <div style={{textAlign:"center",color:"var(--green)",fontWeight:800,marginTop:"4px"}}>お疲れさま！記録しました 🎉</div>}
+    </div>
+  );
+}
+
+/* ---------- 水ストローの泡アニメ（自己完結SVG＝GIF代替） ---------- */
+function WaterStrawAnim(){
+  const bubbles = [{x:60,d:"0s"},{x:56,d:"0.5s"},{x:64,d:"0.9s"},{x:59,d:"1.3s"},{x:62,d:"0.3s"},{x:58,d:"1.6s"}];
+  return (
+    <svg viewBox="0 0 120 140" width="118" height="138" style={{display:"block",margin:"0 auto"}}
+         role="img" aria-label="水ストローのイメージ：コップの水にストローを沈めると泡が上がる">
+      <path d="M28 40 L92 40 L86 130 L34 130 Z" fill="#eaf6fa" stroke="#9fd2e2" strokeWidth="2"/>
+      <path d="M31 68 L89 68 L86 128 L34 128 Z" fill="#bfe6f2"/>
+      <rect x="30" y="66" width="60" height="3" fill="#a5d9ea"/>
+      <rect x="57" y="6" width="7" height="108" rx="2.5" fill="#f6c6d6" stroke="#e05c7a" strokeWidth="1.5"/>
+      {bubbles.map((b,i)=>(
+        <circle key={i} className="bub" cx={b.x} cy="110" r={2.2+i*0.35} fill="#ffffff"
+          stroke="#8fcadd" strokeWidth="0.8" style={{animationDelay:b.d}}/>
+      ))}
+    </svg>
+  );
+}
+
+/* ---------- ストロー太さ比較図（実物比率のSVG断面） ---------- */
+function StrawScaleFigure(){
+  const scale = 2.0;   // 1mm = 2 単位
+  const base = 88;     // 円の底辺を揃える
+  const xs = [58, 150, 244];
+  return (
+    <svg viewBox="0 0 300 134" width="100%" style={{maxWidth:"340px",display:"block",margin:"2px auto 0"}}
+         role="img" aria-label="ストローの太さ比較（太いほど抵抗が弱い）">
+      <text x="150" y="12" textAnchor="middle" fontSize="9" fill="#7a6d64">穴が大きいほど抵抗は弱い＝ラク</text>
+      {STRAWS.map((s,i)=>{
+        const r = s.mm*scale, cx = xs[i], cy = base - r;
+        return (
+          <g key={s.key}>
+            <circle cx={cx} cy={cy} r={r} fill={s.color} fillOpacity="0.16" stroke={s.color} strokeWidth="1.5"/>
+            <circle cx={cx} cy={cy} r={r*0.44} fill="#f8f3ee" stroke={s.color} strokeWidth="1"/>
+            <text x={cx} y="106" textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#1a1714">{s.name.replace(/（.*$/,"")}</text>
+            <text x={cx} y="118" textAnchor="middle" fontSize="8.5" fill="#7a6d64">{s.dia}</text>
+            <text x={cx} y="130" textAnchor="middle" fontSize="8.5" fontWeight="700" fill={s.color}>{s.bp}</text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+/* ---------- ストローの選び方（図＋入手先ガイド） ---------- */
+function StrawGuide(){
+  return (
+    <div className="card">
+      <StrawScaleFigure/>
+      <div style={{marginTop:"12px"}}>
+        {STRAWS.map(s=>(
+          <div className="step" key={s.key}>
+            <div style={{flex:"0 0 66px"}}>
+              <span style={{display:"inline-block",background:s.color,color:"#fff",fontSize:"11px",
+                fontWeight:700,padding:"3px 8px",borderRadius:"6px"}}>{s.dia}</span>
+            </div>
+            <div className="b"><b>{s.name}</b><span>{s.where}</span></div>
+          </div>
+        ))}
+      </div>
+      <p style={{fontSize:"11.5px",color:"var(--muted)",marginTop:"9px"}}>
+        科学的な最適は内径2〜5mm。4mmはその範囲で最も入手しやすいサイズです。
+        背圧の実測目安：3mm≈16／6mm≈4 cmH₂O（細いほど強い）。出典：Rayvox、Titze ほか。
+      </p>
+    </div>
+  );
+}
+
+/* ---------- 各画面 ---------- */
+function WhyScreen(){
+  return (
+    <div className="screen">
+      <div className="lead">まず、これが目的です</div>
+      {WHY_MAIN.map((c,i)=>(
+        <div className="card" key={i}>
+          <h3><span className="tag" style={{background:"var(--teal)"}}>MAIN</span>{c.t}</h3>
+          <p>{c.d}</p>
+        </div>
+      ))}
+
+      <div className="card" style={{borderColor:"var(--teal-l)", background:"#f0f9fc"}}>
+        <h3>🫧 そもそも「背圧」ってなに？</h3>
+        <p>ストローに息を吹くと、細い出口で息が少しせき止められ、口の中に<b>“押し返してくる圧”</b>が生まれます。これが背圧です。<br/>
+        細いストローでジュースを強く吸うときの抵抗、風船をふくらませるときに唇へ返ってくる張り——あの感覚と同じもの。<br/>
+        この圧が声帯を下から支える<b>やわらかいクッション</b>になり、力まなくても声がラクに響きます。太いストローだとクッションは弱め、細いほど強めになります。</p>
+      </div>
+
+      <div className="lead sub">そして、こんな効果も</div>
+      {WHY_SUB.map((c,i)=>(
+        <div className="card" key={i}>
+          <h3><span className="tag" style={{background:"var(--muted)"}}>SUB</span>{c.t}</h3>
+          <p>{c.d}</p>
+        </div>
+      ))}
+      <div className="lead">ストローの太さの科学</div>
+      <div className="sectionNote">細い＝抵抗（背圧）が強い＝負荷が高い。<b>息が続かない人は、まず太いタピオカから</b>始め、慣れたら通常（8mm）→細め（4mm）へ。（選び方・入手先は「やり方」タブ）</div>
+      <div className="card">
+        <StrawScaleFigure/>
+        <table className="bp" style={{marginTop:"12px"}}>
+          <thead><tr><th>ストロー</th><th>内径</th><th>背圧</th><th>位置づけ</th></tr></thead>
+          <tbody>{STRAWS.map(s=>(<tr key={s.key}><td>{s.name}</td><td>{s.dia}</td><td>{s.bp}</td><td>{s.load}</td></tr>))}</tbody>
+        </table>
+        <p style={{fontSize:"11.5px",color:"var(--muted)",marginTop:"9px"}}>
+          背圧の実測目安：3mm≈16／6mm≈4 cmH₂O。出典：Rayvox（straw dimensions / back pressure）、Titze ほかSOVT研究。数値は目安です。
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function HowtoScreen({audio}){
+  return (
+    <div className="screen">
+      <div className="lead">🥤 ストローの選び方（まずここから）</div>
+      <div className="sectionNote">太い→細いの順にステップアップ。細め（4mm）は100均で探して買っておきましょう。</div>
+      <StrawGuide/>
+
+      <div className="lead">基本の手順</div>
+      <div className="card">
+        {STEPS.map((s,i)=>(
+          <div className="step" key={i}>
+            <div className="n">{i+1}</div>
+            <div className="b"><b>{s.t}</b><span>{s.d}</span></div>
+          </div>
+        ))}
+      </div>
+
+      <div className="lead">💧 水ストロー（上級）のイメージ</div>
+      <div className="card" style={{textAlign:"center"}}>
+        <WaterStrawAnim/>
+        <p style={{fontSize:"12.5px",marginTop:"4px"}}>コップの水に5〜10cm沈めて発声。<b>泡が一定の量で立ち続ける</b>のが上手なサイン。飛び散る時は息が強すぎ、出ない時は深すぎ・息が弱いです。</p>
+      </div>
+
+      <div className="lead">✅ ちゃんと鳴らせている？（チェック）</div>
+      <div className="sectionNote">下のうち3つ以上あてはまれば、うまく鳴らせています。</div>
+      <div className="card">
+        {CHECKS.map((c,i)=>(
+          <div className="check" key={i}><span className="ic">✓</span><span>{c}</span></div>
+        ))}
+        <div className="btnrow" style={{marginTop:"12px"}}>
+          <button className="btn-tone" style={{flex:1}} onClick={()=>audio.play(220,4,"hold")}>♪ 基準音を鳴らす（この高さで）</button>
+        </div>
+      </div>
+
+      <div className="lead">🔧 うまくいかないとき</div>
+      <div className="sectionNote">症状をタップすると、原因と対処が開きます。</div>
+      {TROUBLES.map((t,i)=>(
+        <details className="tb" key={i}>
+          <summary>{t.p}<span className="arw">▶</span></summary>
+          <div className="body">
+            <div className="why">原因：{t.why}</div>
+            <div className="fix"><b>対処：</b>{t.fix}</div>
+          </div>
+        </details>
+      ))}
+    </div>
+  );
+}
+
+function MenuScreen({audio, onDone}){
+  const [openId, setOpenId] = useState(null);
+  const groups = [["beg","初級"],["mid","中級"],["adv","上級"]];
+  return (
+    <div className="screen">
+      {groups.map(([key,label])=>(
+        <div key={key}>
+          <div className="lead" style={{color:LV[key].color}}>{label}</div>
+          {EXERCISES.filter(e=>e.lv===key).map(ex=>{
+            const open = openId===ex.id;
+            return (
+              <div className="card ex" key={ex.id}>
+                <div className="exhead">
+                  <span className="lv" style={{background:LV[ex.lv].color}}>{LV[ex.lv].name}</span>
+                  <b style={{fontSize:"15px"}}>{ex.id}. {ex.title}</b>
+                </div>
+                <div className="goal">{ex.goal}</div>
+                <div className="spec">
+                  <span className="badge">🥤 {ex.straw}</span>
+                  <span className="badge">{ex.mode==="phrase" ? "🎵 サビ3回（カウントなし）" : "⏱ "+ex.workSec+"秒 × "+ex.reps+"本"}</span>
+                </div>
+                {open ? (
+                  <>
+                    <div className="cue"><b>成功のサイン：</b>{ex.cue}</div>
+                    {ex.water && <div style={{marginBottom:"10px"}}><WaterStrawAnim/></div>}
+                    {ex.mode==="phrase"
+                      ? <PhraseRunner ex={ex} onDone={onDone} />
+                      : <Runner ex={ex} audio={audio} onDone={onDone} />}
+                    <div style={{textAlign:"center",marginTop:"10px"}}>
+                      <button className="btn-ghost" onClick={()=>setOpenId(null)} style={{fontSize:"12.5px",padding:"7px 14px"}}>閉じる</button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="btnrow">
+                    <button className="btn-primary" onClick={()=>setOpenId(ex.id)}>開いて練習する</button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FeedbackScreen(){
+  const [rating, setRating] = useState(0);
+  const [text, setText] = useState("");
+  const [name, setName] = useState("");
+  const [sent, setSent] = useState(false);
+  function submit(){
+    logEvent("feedback", {rating:rating, text:text.slice(0,1000), name:name.slice(0,50)});
+    setSent(true);
+  }
+  if(sent){
+    return (
+      <div className="screen">
+        <div className="card" style={{textAlign:"center",padding:"28px 16px"}}>
+          <div style={{fontSize:"34px"}}>🙏</div>
+          <p style={{marginTop:"8px",fontWeight:700}}>ありがとうございました！</p>
+          <p style={{fontSize:"12.5px",color:"var(--muted)",marginTop:"4px"}}>いただいた声はアプリの改善に活かします。</p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="screen">
+      <div className="lead">📝 フィードバック</div>
+      <div className="sectionNote">使ってみた感想を教えてください（任意・匿名でOK）。</div>
+      <div className="card">
+        <p style={{fontSize:"13px",fontWeight:700,marginBottom:"8px"}}>使いやすさ・満足度</p>
+        <div style={{display:"flex",gap:"6px",marginBottom:"16px"}}>
+          {[1,2,3,4,5].map(n=>(
+            <button key={n} onClick={()=>setRating(n)} aria-label={n+"点"}
+              style={{flex:1,padding:"9px 0",background:n<=rating?"var(--amber-l)":"var(--surface)",
+                color:n<=rating?"#fff":"var(--muted)",border:"1px solid var(--line)",fontSize:"17px"}}>★</button>
+          ))}
+        </div>
+        <p style={{fontSize:"13px",fontWeight:700,marginBottom:"6px"}}>感想・要望（任意）</p>
+        <textarea value={text} onChange={e=>setText(e.target.value)} rows="4"
+          placeholder="例：背圧の意味がわかった／基準音がもう少し低いと助かる など"
+          style={{width:"100%",border:"1px solid var(--line)",borderRadius:"10px",padding:"10px",
+            fontFamily:"inherit",fontSize:"13px",resize:"vertical",color:"var(--ink)"}}/>
+        <p style={{fontSize:"13px",fontWeight:700,margin:"12px 0 6px"}}>お名前（任意）</p>
+        <input value={name} onChange={e=>setName(e.target.value)} placeholder="ニックネームでもOK"
+          style={{width:"100%",border:"1px solid var(--line)",borderRadius:"10px",padding:"10px",
+            fontFamily:"inherit",fontSize:"13px",color:"var(--ink)"}}/>
+        <button className="btn-primary" style={{width:"100%",marginTop:"16px",opacity:(!rating && !text.trim())?0.5:1}}
+          onClick={submit} disabled={!rating && !text.trim()}>送信する</button>
+        <p style={{fontSize:"11px",color:"var(--muted)",marginTop:"10px"}}>
+          いただいた内容はサービス改善のみに使用します。個人を特定する情報の入力は不要です。
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- ルート ---------- */
+function App(){
+  const [tab, setTab] = useState("why");
+  const [log, setLog] = useState(loadLog);
+  const audio = useAudio();
+  const onDone = ()=> setLog(markDone());
+
+  useEffect(()=>{ logEvent("access"); }, []);  // 起動時にアクセス記録（URL未設定なら無送信）
+
+  const tabs = [
+    {id:"why",  ic:"💡", label:"なぜ"},
+    {id:"how",  ic:"📋", label:"やり方"},
+    {id:"menu", ic:"🎯", label:"メニュー"},
+    {id:"feedback", ic:"📝", label:"感想"},
+  ];
+  const isToday = log.last === todayStr();
+
+  return (
+    <div className="app">
+      <div className="safety">⚠️ 痛み・違和感が出たら、すぐに中止してください</div>
+      <div className="head">
+        <h1>ストロー発声トレーナー <span style={{fontSize:"12px",color:"var(--muted)",fontWeight:400}}>β</span></h1>
+        <p>SOVT（半閉鎖声道）で、力まない発声を毎日のセルフケアに。</p>
+        <div className="streak">
+          🔥 <span>連続</span><b>{log.streak||0}</b><span>日</span>
+          <span style={{color:"var(--muted)"}}>{isToday ? "／今日は達成 ✓" : "／今日はまだ"}</span>
+        </div>
+      </div>
+
+      {tab==="why"      && <WhyScreen/>}
+      {tab==="how"      && <HowtoScreen audio={audio}/>}
+      {tab==="menu"     && <MenuScreen audio={audio} onDone={onDone}/>}
+      {tab==="feedback" && <FeedbackScreen/>}
+
+      <div className="foot">
+        本アプリは声のセルフケアを補助する教育目的のツールです。診断・治療を目的とするものではありません。<br/>
+        痛み・声がれ・違和感が続く場合は、耳鼻咽喉科など専門家にご相談ください。<br/>
+        © SHIONボイストレーニング教室
+      </div>
+
+      <nav><div className="inner">
+        {tabs.map(t=>(
+          <button key={t.id} className={tab===t.id?"on":""} onClick={()=>{audio.stop(); setTab(t.id);}}>
+            <span className="ic">{t.ic}</span>{t.label}
+          </button>
+        ))}
+      </div></nav>
+    </div>
+  );
+}
+
+const el = document.getElementById("loading");
+if(el) el.style.display = "none";
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
