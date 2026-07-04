@@ -151,6 +151,25 @@ const WHY_SUB = [
    d:"声帯は歌っている間、1秒に数百回も左右がぶつかっています。力任せの発声を続けると負担が積み重なることも。ウォームアップやクールダウンにSVOTを習慣化すれば、声のコンディションを保つケアになります。（※医療行為ではなく、あくまでセルフケアの補助です）"},
 ];
 
+/* ---------- こんな時に使える（適応）／使えない・受診を（限界・注意） ----------
+   ※研究で支持されている“使い方”。効果を断定せず、セルフケア補助・トリアージとして提示。
+   出典：発声疲労の回復＝安静と同等の効果（PMC9815935）／ウォームアップとしての支持（PubMed 32919829）／
+        MTD・最大発声時間の改善RCT（PMC4610291・11567055）／小児結節RCT（ASHA 2024_JSLHR-24-00243）／
+        禁忌＝重度の医学的状態・術後（Bayside Voice Centre）／単音のみという限界／受診目安＝ASHA音声障害ガイド。 */
+const GOOD_FOR = [
+  {t:"歌いすぎて声が重い・疲れた", d:"発声疲労のあと、声の努力量や息の効率が戻ることが研究で示されています（安静と同等の回復効果の報告も）。"},
+  {t:"ボイトレを始めたばかりで、息と声の感覚が掴めない", d:"発声に必要な最小の圧（PTP）が下がり、力まず“効率よく鳴る”感覚を覚えられます。簡単な課題から始められます。"},
+  {t:"歌う前のウォームアップ／歌ったあとのクールダウン", d:"声帯の動きと協調を整える準備・回復運動として支持されています。"},
+  {t:"声を使いすぎて力み（過緊張）が出やすい", d:"背圧で声帯の衝突をやわらげ、力んだ発声を楽な方向へ導きます。"},
+  {t:"病み上がりで声が戻りにくい（痛みがない範囲で）", d:"痛みがなく“声が重い・かすれが残る”段階のやさしい立て直しに。痛みがある時は下の注意へ。"},
+];
+const NOT_FOR = [
+  {t:"痛み・強い炎症がある／急性ののどの不調", d:"痛みは安静のサイン。無理にやらず、まず休養を。"},
+  {t:"声がれ・違和感が2週間以上続く", d:"結節・ポリープ・麻痺など、診断と治療が必要な場合があります。耳鼻咽喉科（できれば音声外来）へ。"},
+  {t:"声帯の手術後・治療中", d:"必ず主治医の指示に従ってください（自己判断で行わない）。"},
+  {t:"音程・滑舌・表現など“歌そのもの”の課題", d:"ストローは1つの音を通す練習。歌詞・表現・音程感はレッスンで。仕上げの「サビ3回」で歌に橋渡しします。"},
+];
+
 /* ---------- ストローの太さ（入手しやすい実物ベースの3段階） ---------- */
 const STRAWS = [
   {key:"tapioca", name:"太（タピオカ）", dia:"約10〜12mm", mm:11, color:"#1e7a42",
@@ -558,6 +577,39 @@ function StrawGuide(){
 function WhyScreen(){
   return (
     <div className="screen">
+      <div className="lead" style={{color:"var(--green)"}}>こんな時に使えます</div>
+      <div className="sectionNote">SOVT（ストロー発声）が向いている場面。研究で支持されている使い方です。</div>
+      <div className="card">
+        {GOOD_FOR.map((g,i)=>(
+          <div key={i} style={{paddingBottom:i<GOOD_FOR.length-1?"11px":0,marginBottom:i<GOOD_FOR.length-1?"11px":0,
+            borderBottom:i<GOOD_FOR.length-1?"1px solid var(--line)":"none"}}>
+            <div style={{display:"flex",gap:"8px",alignItems:"flex-start"}}>
+              <span style={{color:"var(--green)",fontWeight:900}}>✓</span>
+              <b style={{fontSize:"13.5px"}}>{g.t}</b>
+            </div>
+            <span style={{display:"block",fontSize:"12.5px",color:"var(--muted)",paddingLeft:"22px",marginTop:"2px"}}>{g.d}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="lead" style={{color:"var(--wine)"}}>こんな時は、休養・受診を（ストローで解消できない場面）</div>
+      <div className="sectionNote">無理せず、休むか専門家へ。ストロー発声はあくまでセルフケアの補助です。</div>
+      <div className="card" style={{borderColor:"#f2d6dc", background:"#fbeef0"}}>
+        {NOT_FOR.map((g,i)=>(
+          <div key={i} style={{paddingBottom:i<NOT_FOR.length-1?"11px":0,marginBottom:i<NOT_FOR.length-1?"11px":0,
+            borderBottom:i<NOT_FOR.length-1?"1px solid #f2d6dc":"none"}}>
+            <div style={{display:"flex",gap:"8px",alignItems:"flex-start"}}>
+              <span style={{color:"var(--wine)",fontWeight:900}}>⚠</span>
+              <b style={{fontSize:"13.5px"}}>{g.t}</b>
+            </div>
+            <span style={{display:"block",fontSize:"12.5px",color:"#7a5560",paddingLeft:"22px",marginTop:"2px"}}>{g.d}</span>
+          </div>
+        ))}
+        <p style={{fontSize:"11px",color:"var(--muted)",marginTop:"10px"}}>
+          ストロー発声は治療ではありません。参考：ASHA音声障害ガイド、発声疲労の回復・SOVTの臨床研究（2024-25）ほか。
+        </p>
+      </div>
+
       <div className="lead">まず、これが目的です</div>
       {WHY_MAIN.map((c,i)=>(
         <div className="card" key={i}>
