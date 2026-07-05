@@ -286,7 +286,10 @@ function useAudio(){
       if(!AC) return null;
       ctxRef.current = new AC();
     }
-    if(ctxRef.current.state === "suspended") ctxRef.current.resume();
+    // iOS対策：suspended だけでなく interrupted（通話後など）も running に戻す
+    if(ctxRef.current.state !== "running" && ctxRef.current.resume){
+      try{ ctxRef.current.resume(); }catch(e){}
+    }
     return ctxRef.current;
   }
   function stop(){
@@ -337,7 +340,17 @@ function useAudio(){
     osc.stop(t0+durSec+0.03);
     nodeRef.current = {osc,gain};
   }
-  useEffect(()=>()=>stop(),[]);
+  // iOS対策：最初の画面タップ／タッチで AudioContext を先に解錠しておく
+  useEffect(()=>{
+    const unlock = ()=>{ try{ ensure(); }catch(e){} };
+    document.addEventListener("pointerdown", unlock, {once:true});
+    document.addEventListener("touchend", unlock, {once:true});
+    return ()=>{
+      document.removeEventListener("pointerdown", unlock);
+      document.removeEventListener("touchend", unlock);
+      stop();
+    };
+  },[]);
   return {play, stop, ensure};
 }
 
