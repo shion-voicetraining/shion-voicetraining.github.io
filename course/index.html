@@ -54,16 +54,14 @@
     "@type": "CourseInstance",
     "courseMode": "online",
     "courseWorkload": "PT15H",
-    "startDate": "2026-09-13",
-    "endDate": "2027-02-14",
     "instructor": {
       "@type": "Person",
       "name": "SHION"
     }
   },
   "offers": [
-    {"@type": "Offer", "name": "外部・通し（10回）", "price": "40000", "priceCurrency": "JPY", "priceValidUntil": "2026-09-12", "availability": "https://schema.org/InStock", "category": "Tuition"},
-    {"@type": "Offer", "name": "外部・1ブロック（5回）", "price": "20000", "priceCurrency": "JPY", "priceValidUntil": "2026-09-12", "availability": "https://schema.org/InStock", "category": "Tuition"}
+    {"@type": "Offer", "name": "外部・通し（10回）", "price": "40000", "priceCurrency": "JPY", "availability": "https://schema.org/InStock", "category": "Tuition"},
+    {"@type": "Offer", "name": "外部・1ブロック（5回）", "price": "20000", "priceCurrency": "JPY", "availability": "https://schema.org/InStock", "category": "Tuition"}
   ]
 }
 </script>
@@ -300,19 +298,16 @@ a { color: inherit; text-decoration: none; }
   display: grid; grid-template-columns: 1fr; gap: 8px;
 }
 .session-item {
-  display: grid; grid-template-columns: 70px 90px 1fr; gap: 14px; align-items: center;
+  display: grid; grid-template-columns: 70px 1fr; gap: 14px; align-items: center;
   padding: 12px 14px; border-radius: 10px;
   background: #fff5f9;
   border: 1px solid var(--line);
   font-size: 0.88rem;
 }
 .session-no { font-weight: 900; color: var(--rose); font-size: 0.82rem; letter-spacing: 0.04em; }
-.session-date { color: var(--sub); font-size: 0.8rem; font-weight: 700; }
 .session-theme { color: var(--ink); font-weight: 600; }
 @media (max-width: 760px) {
   .session-item { grid-template-columns: 60px 1fr; row-gap: 4px; }
-  .session-date { grid-column: 2; }
-  .session-theme { grid-column: 1 / -1; }
 }
 
 /* ===== Features ===== */
@@ -490,7 +485,7 @@ a { color: inherit; text-decoration: none; }
       <a href="../about/">講師について</a>
       <a href="../voice/">生徒の声</a>
       <a href="../faq/">よくある質問</a>
-      <a href="mailto:shion.vocal@gmail.com?subject=%E7%99%BA%E5%A3%B0%E3%81%AE%E3%81%97%E3%81%8F%E3%81%BF%E8%AC%9B%E5%BA%A7%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6" class="nav-cta">講座に申込む</a>
+      <a href="mailto:shion.vocal@gmail.com?subject=%E7%99%BA%E5%A3%B0%E3%81%AE%E3%81%97%E3%81%8F%E3%81%BF%E8%AC%9B%E5%BA%A7%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6" class="nav-cta">講座について問い合わせ</a>
     </nav>
   </div>
 </header>
@@ -501,7 +496,7 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ===== Hero ===== -->
 <section class="course-hero" aria-label="講座ヒーロー">
-  <span class="course-status">2026年9月13日 開講 ／ 第1期 募集中</span>
+  <span class="course-status">2026年 秋冬 開講予定 ／ 日程は決まり次第ご案内</span>
   <h1>発声のしくみ講座</h1>
   <p class="sub">〜その練習、なぜ効く？に答えられる講師になる／音声学で読み解く〜</p>
   <p class="lead">
@@ -516,7 +511,7 @@ a { color: inherit; text-decoration: none; }
     <div><div class="k">FORMAT</div><div class="v">オンライン</div></div>
     <div><div class="k">SESSIONS</div><div class="v">全10回（5×2）</div></div>
     <div><div class="k">SCHEDULE</div><div class="v">第2・第4日曜</div></div>
-    <div><div class="k">START</div><div class="v">2026/9/13</div></div>
+    <div><div class="k">START</div><div class="v">2026年 秋冬予定</div></div>
   </div>
 </section>
 
@@ -691,27 +686,22 @@ a { color: inherit; text-decoration: none; }
       <ul class="session-list">
         <li class="session-item">
           <span class="session-no">第1回</span>
-          <span class="session-date">9/13 (日)</span>
           <span class="session-theme">オリエンテーション：なぜ「感覚」に理論を足すのか</span>
         </li>
         <li class="session-item">
           <span class="session-no">第2回</span>
-          <span class="session-date">9/27 (日)</span>
           <span class="session-theme">呼吸と身体：「お腹から声」の正体／力みの解き方（SOVT）</span>
         </li>
         <li class="session-item">
           <span class="session-no">第3回</span>
-          <span class="session-date">10/11 (日)</span>
           <span class="session-theme">声帯・声門閉鎖：閉鎖過多／不足の分岐</span>
         </li>
         <li class="session-item">
           <span class="session-no">第4回</span>
-          <span class="session-date">10/25 (日)</span>
           <span class="session-theme">共鳴・フォルマント：「鼻に当てる」の正体</span>
         </li>
         <li class="session-item">
           <span class="session-no">第5回</span>
-          <span class="session-date">11/8 (日)</span>
           <span class="session-theme">レジスター：地声／裏声／ミックスの仕組み</span>
         </li>
       </ul>
@@ -726,27 +716,22 @@ a { color: inherit; text-decoration: none; }
       <ul class="session-list">
         <li class="session-item">
           <span class="session-no">第6回</span>
-          <span class="session-date">11/22 (日)</span>
           <span class="session-theme">高音の力み：原因の切り分けと対処</span>
         </li>
         <li class="session-item">
           <span class="session-no">第7回</span>
-          <span class="session-date">12/13 (日)</span>
           <span class="session-theme">響かない／飛ばない：共鳴とtwangの活用</span>
         </li>
         <li class="session-item">
           <span class="session-no">第8回</span>
-          <span class="session-date">1/10 (日)</span>
           <span class="session-theme">換声点・ミックスの作り方</span>
         </li>
         <li class="session-item">
           <span class="session-no">第9回</span>
-          <span class="session-date">1/24 (日)</span>
           <span class="session-theme">ベルティング・CCMの発声</span>
         </li>
         <li class="session-item">
           <span class="session-no">第10回</span>
-          <span class="session-date">2/14 (日)</span>
           <span class="session-theme">指導翻訳＋継続学習のための地図</span>
         </li>
       </ul>
@@ -818,8 +803,8 @@ a { color: inherit; text-decoration: none; }
         <h3>日程</h3>
         <ul>
           <li><strong>頻度</strong>：毎月 第2・第4日曜 10:00〜</li>
-          <li><strong>第1期 基礎編</strong>：9/13・9/27・10/11・10/25・11/8</li>
-          <li><strong>第2期 応用編</strong>：11/22・12/13・1/10・1/24・2/14</li>
+          <li><strong>開講時期</strong>：2026年 秋冬 開講予定（8月のワークショップ後に日程を確定・ご案内します）</li>
+          <li><strong>進み方</strong>：第1期 基礎編（5回）→ 第2期 応用編（5回）と続けて開催</li>
           <li><strong>欠席フォロー</strong>：録画＋Discordで補完</li>
         </ul>
       </div>
@@ -930,7 +915,7 @@ a { color: inherit; text-decoration: none; }
 <!-- ===== CTA ===== -->
 <section class="section cta">
   <div class="container">
-    <h2>第1期 募集中（外部5名・既存3〜5名）</h2>
+    <h2>第1期は 2026年 秋冬 開講予定です</h2>
     <p>気になる点はお気軽にお問い合わせください。説明会も随時開催しています。</p>
     <div class="cta-buttons">
       <a href="mailto:shion.vocal@gmail.com?subject=%E7%99%BA%E5%A3%B0%E3%81%AE%E3%81%97%E3%81%8F%E3%81%BF%E8%AC%9B%E5%BA%A7%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6" class="btn btn-primary">講座について問い合わせる</a>
@@ -944,7 +929,7 @@ a { color: inherit; text-decoration: none; }
   <div class="footer-inner">
     <div class="footer-brand">
       <span class="logo">SHION Voice Training</span>
-      <p>千葉駅・稲毛駅前のマンツーマン専門ボイストレーニング教室。<br>発声の仕組みを座学で学ぶ「発声のしくみ講座」も開講中。</p>
+      <p>千葉駅・稲毛駅前のマンツーマン専門ボイストレーニング教室。<br>発声の仕組みを座学で学ぶ「発声のしくみ講座」も2026年秋冬 開講予定。</p>
     </div>
     <div class="footer-col">
       <h4>サービス</h4>
