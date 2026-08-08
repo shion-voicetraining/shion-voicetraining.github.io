@@ -211,8 +211,8 @@ a { color: inherit; text-decoration: none; }
 .ts-hero .sub { color: var(--rose); font-weight: 700; font-size: 1rem; margin: 0 0 20px; }
 .ts-hero .lead { max-width: 700px; margin: 0 auto 30px; color: var(--ink); font-size: 1rem; }
 .ts-summary {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-  max-width: 800px; margin: 0 auto 26px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  max-width: 640px; margin: 0 auto 30px;
 }
 .ts-summary > div {
   background: #fff; border: 1px solid var(--line); border-radius: 12px;
@@ -228,7 +228,7 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 760px) {
   .ts-hero h1 { font-size: 1.8rem; }
   .ts-hero .sub { font-size: 0.9rem; }
-  .ts-summary { grid-template-columns: repeat(2, 1fr); }
+  .ts-summary { grid-template-columns: 1fr; gap: 10px; }
   .btn { width: 100%; }
 }
 
@@ -301,7 +301,7 @@ a { color: inherit; text-decoration: none; }
   background: #fff; border: 2px solid var(--pink); border-radius: 20px;
   padding: 30px; box-shadow: var(--shadow); margin-bottom: 34px;
 }
-.price-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .price-grid li { list-style: none; background: var(--light); border-radius: 10px; padding: 14px 18px; font-size: 0.92rem; }
 .price-grid .k { display: block; font-size: 0.72rem; color: var(--sub); font-weight: 800; letter-spacing: 0.06em; }
 .price-grid .v { font-weight: 900; color: var(--deep); font-size: 1.02rem; }
@@ -313,6 +313,8 @@ a { color: inherit; text-decoration: none; }
 .caution ul { list-style: none; padding: 0; margin: 0; }
 .caution li { font-size: 0.88rem; color: var(--ink); padding: 5px 0 5px 18px; position: relative; }
 .caution li::before { content: '・'; position: absolute; left: 0; color: var(--pink); }
+.caution-note { font-size: 0.8rem; color: var(--sub); margin: 14px 0 0; }
+.caution-note a { color: var(--rose); text-decoration: underline; }
 
 .faq-list { max-width: 780px; margin: 0 auto 34px; }
 .faq-item { border-bottom: 1px solid var(--line); padding: 16px 4px; }
@@ -377,7 +379,7 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ===== 1. ファーストビュー ===== -->
 <section class="ts-hero" aria-label="講師サポート">
-  <span class="ts-status">現役ボイストレーナー・歌唱指導者の方へ</span>
+  <span class="ts-status">ボイストレーナー・歌唱指導者／これから教え始める方へ</span>
   <h1>講師サポート</h1>
   <p class="sub">体験レッスンのロールプレイ＆個別フィードバック／指導ケース相談</p>
   <p class="lead">
@@ -389,9 +391,7 @@ a { color: inherit; text-decoration: none; }
     <div><div class="k">FORMAT</div><div class="v">オンライン<br>マンツーマン</div></div>
     <div><div class="k">TIME</div><div class="v">60分</div></div>
     <div><div class="k">PRICE</div><div class="v">9,800円<br>（税込）</div></div>
-    <div><div class="k">CAPACITY</div><div class="v">2商品合計で<br>月2枠程度</div></div>
   </div>
-  <p class="hero-note">「発声のしくみ講座」を受講していない方もご利用いただけます。</p>
   <a href="mailto:shion.vocal@gmail.com?subject=%E3%80%90%E8%AC%9B%E5%B8%AB%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%80%91%E3%81%8A%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF&amp;body=%E4%BB%A5%E4%B8%8B%E3%82%92%E3%81%94%E8%A8%98%E5%85%A5%E3%81%AE%E3%81%86%E3%81%88%E9%80%81%E4%BF%A1%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%0A%0A%E3%83%BB%E3%81%94%E5%B8%8C%E6%9C%9B%E3%81%AE%E3%83%A1%E3%83%8B%E3%83%A5%E3%83%BC%EF%BC%88%E4%BD%93%E9%A8%93%E3%83%AC%E3%83%83%E3%82%B9%E3%83%B3%E5%AE%9F%E8%B7%B5%E7%B7%B4%E7%BF%92%EF%BC%8F%E6%8C%87%E5%B0%8E%E3%82%B1%E3%83%BC%E3%82%B9%E7%9B%B8%E8%AB%87%EF%BC%89%EF%BC%9A%0A%E3%83%BB%E5%80%99%E8%A3%9C%E6%97%A5%E6%99%82%EF%BC%88%E7%AC%AC3%E5%B8%8C%E6%9C%9B%E3%81%BE%E3%81%A7%EF%BC%89%EF%BC%9A%0A%E3%83%BB%E8%AC%9B%E5%B8%AB%E6%AD%B4%EF%BC%9A%0A%E3%83%BB%E5%BD%93%E6%97%A5%E3%81%84%E3%81%A1%E3%81%B0%E3%82%93%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%81%93%E3%81%A8%EF%BC%9A%0A" class="btn btn-primary">講師サポートに申し込む</a>
 </section>
 
@@ -461,11 +461,9 @@ a { color: inherit; text-decoration: none; }
       <div class="menu-block">
         <h3>当日おこなうこと</h3>
         <ul class="check-list">
-          <li><strong>体験レッスンを20分程度、実演していただきます</strong></li>
-          <li>SHIONが体験者役を担当します（想定する体験者の設定は事前にうかがいます）</li>
-          <li>ヒアリング・体験内容・説明・時間配分について、個別にフィードバックします</li>
-          <li>改善したい部分は、その場でもう一度実演して確かめます</li>
-          <li>最後に、次回試す改善点を3つ以内に整理します</li>
+          <li>20分程度の体験レッスンを実演します。SHIONが体験者役を担当します</li>
+          <li>ヒアリング・体験内容・説明・時間配分を個別にフィードバックします</li>
+          <li>改善したい部分を再実演し、次回試すことを3つ以内に整理します</li>
         </ul>
       </div>
 
@@ -501,11 +499,9 @@ a { color: inherit; text-decoration: none; }
       <div class="menu-block">
         <h3>当日おこなうこと</h3>
         <ul class="check-list">
-          <li><strong>実際に判断に迷っているケースを持ち込んでいただきます</strong></li>
-          <li>観察した事実・考えている仮説・すでに実施したことを切り分けて整理します</li>
-          <li>考えられる仮説を複数並べ、確認する順番を一緒に決めます</li>
-          <li>生徒への説明のしかたも、必要に応じて言い換えを検討します</li>
-          <li>最後に、次に確認すること・試すことを3つ以内に整理します</li>
+          <li>観察した事実・考えている仮説・すでに試したことを整理します</li>
+          <li>考えられる仮説を複数並べ、確認する順番や説明方法を検討します</li>
+          <li>次に確認すること・試すことを3つ以内に整理します</li>
         </ul>
       </div>
 
@@ -561,7 +557,6 @@ a { color: inherit; text-decoration: none; }
         <li><span class="k">形式</span><span class="v">オンライン・マンツーマン</span></li>
         <li><span class="k">所要時間</span><span class="v">60分</span></li>
         <li><span class="k">料金</span><span class="v">9,800円（税込）</span></li>
-        <li><span class="k">受付枠</span><span class="v">2商品合計で月2枠程度</span></li>
       </ul>
     </div>
 
@@ -570,8 +565,8 @@ a { color: inherit; text-decoration: none; }
       <ul>
         <li>生徒さんの個人情報・録音・動画・健康情報はお持ち込みいただけません。「生徒A」など、個人が特定できない形に匿名化してお話しください。</li>
         <li>本サービスでは、声の疾患について医療的な診断や治療は行いません。痛みや声がれなどの不調が続く場合は、音声を専門とする耳鼻咽喉科へのご相談をご検討ください。</li>
-        <li>相談内で扱った内容は、守秘に配慮して取り扱います。事例を紹介する場合は、別途あらためて許可をいただいたうえで匿名化します。</li>
       </ul>
+      <p class="caution-note">日程変更・キャンセルの規定、守秘や事例掲載の取り扱いは<a href="../legal/">特商法表記・プライバシーポリシー</a>をご確認ください。</p>
     </div>
 
     <div class="faq-list">
@@ -589,23 +584,11 @@ a { color: inherit; text-decoration: none; }
       </div>
       <div class="faq-item">
         <div class="faq-q">申し込んだあとの流れを教えてください。</div>
-        <div class="faq-a">日程を調整し、お支払い方法をご案内します。その後、事前シート（10分程度）にご記入いただき、当日はGoogle Meetで実施します。終了後、記入済みのシートをお送りします。</div>
+        <div class="faq-a">日程を調整し、お支払い方法をご案内します。その後、事前シート（10分程度）にご記入いただき、当日はGoogle Meetで実施します。終了後、記入済みのシートをお送りします。録音・録画のご希望や当日の環境については、この案内のなかで個別に確認します。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">生徒の音源や動画を見てもらうことはできますか？</div>
         <div class="faq-a">申し訳ありませんが、お持ち込みいただけません。ご本人の同意の範囲を超えて第三者が視聴することになるためです。ご自身が観察した内容を言葉にしてお持ちください。整理のしかたも一緒に扱います。</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">相談すれば、生徒の悩みは解決しますか？</div>
-        <div class="faq-a">解決をお約束するものではありません。声に起きていることを一つに断定することはできないため、この60分で目指すのは「次に確かめること・試すことが決まっている状態」です。</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">録音・録画はありますか？</div>
-        <div class="faq-a">記録を残したいご希望がある場合は、当日はじめに確認したうえで対応します。ご本人の同意なく録画データを第三者に共有・公開することはありません。</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">日程変更・キャンセルはできますか？</div>
-        <div class="faq-a">前日までのご連絡で無料で日程変更・キャンセルを承ります。当日のキャンセルは100%頂戴します（詳細は<a href="../legal/#tokushou" style="color:var(--rose); text-decoration:underline;">特商法表記</a>をご確認ください）。</div>
       </div>
     </div>
 
@@ -614,7 +597,7 @@ a { color: inherit; text-decoration: none; }
       <p>ご希望のメニューと候補日時を添えて、下のボタンからお申し込みください。</p>
       <a href="mailto:shion.vocal@gmail.com?subject=%E3%80%90%E8%AC%9B%E5%B8%AB%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%80%91%E3%81%8A%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF&amp;body=%E4%BB%A5%E4%B8%8B%E3%82%92%E3%81%94%E8%A8%98%E5%85%A5%E3%81%AE%E3%81%86%E3%81%88%E9%80%81%E4%BF%A1%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%0A%0A%E3%83%BB%E3%81%94%E5%B8%8C%E6%9C%9B%E3%81%AE%E3%83%A1%E3%83%8B%E3%83%A5%E3%83%BC%EF%BC%88%E4%BD%93%E9%A8%93%E3%83%AC%E3%83%83%E3%82%B9%E3%83%B3%E5%AE%9F%E8%B7%B5%E7%B7%B4%E7%BF%92%EF%BC%8F%E6%8C%87%E5%B0%8E%E3%82%B1%E3%83%BC%E3%82%B9%E7%9B%B8%E8%AB%87%EF%BC%89%EF%BC%9A%0A%E3%83%BB%E5%80%99%E8%A3%9C%E6%97%A5%E6%99%82%EF%BC%88%E7%AC%AC3%E5%B8%8C%E6%9C%9B%E3%81%BE%E3%81%A7%EF%BC%89%EF%BC%9A%0A%E3%83%BB%E8%AC%9B%E5%B8%AB%E6%AD%B4%EF%BC%9A%0A%E3%83%BB%E5%BD%93%E6%97%A5%E3%81%84%E3%81%A1%E3%81%B0%E3%82%93%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%81%93%E3%81%A8%EF%BC%9A%0A" class="btn btn-primary">講師サポートに申し込む</a>
       <p class="note">
-        オンライン・マンツーマン／60分／9,800円（税込）／2商品合計で月2枠程度<br>
+        オンライン・マンツーマン／60分／9,800円（税込）<br>
         担当講師については<a href="../about/">講師プロフィール</a>をご覧ください。<br>
         ※こちらは講師・指導者の方向けの窓口です。歌うことを習いたい方は<a href="../lesson/">マンツーマンレッスン</a>をご覧ください。
       </p>
