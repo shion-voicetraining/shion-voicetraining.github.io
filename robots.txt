@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /index_old.html
+
+# /index_old.html は旧版バックアップ。noindexメタで除外するため、
+# Googleがそのメタを読めるようクロールはブロックしない
 
 Sitemap: https://shion-voice.com/sitemap.xml
