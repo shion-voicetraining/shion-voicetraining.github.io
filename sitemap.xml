@@ -54,6 +54,11 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-  <!-- 記事を公開したら必ずここに追加すること：
-       https://shion-voice.com/column/voice-trainer-side-job/ -->
+  <url>
+    <loc>https://shion-voice.com/column/voice-trainer-side-job/</loc>
+    <lastmod>2026-08-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 新しい記事を公開したら、必ずここに <url> を追加すること -->
 </urlset>
