@@ -249,8 +249,8 @@ a { color: inherit; text-decoration: none; }
 
 /* ===== Service cards ===== */
 .services { background: #fff; }
-.service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 920px; margin: 0 auto; }
-@media (max-width: 1000px) { .service-grid { grid-template-columns: 1fr; } }
+.service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1080px; margin: 0 auto; align-items: stretch; }
+@media (max-width: 1000px) { .service-grid { grid-template-columns: 1fr; max-width: 560px; } }
 .service-card {
   background: #fff; border: 1px solid var(--line); border-radius: 24px;
   padding: 36px 32px; box-shadow: var(--shadow);
@@ -467,11 +467,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </button>
     <nav class="nav" id="nav" aria-label="メインメニュー">
       <a href="./lesson/">マンツーマン</a>
+      <a href="./course/">発声のしくみ講座</a>
       <div class="nav-group">
         <button type="button" class="nav-parent" id="nav-teacher-btn" aria-expanded="false" aria-controls="nav-teacher-sub">講師向け<span class="nav-caret" aria-hidden="true"></span></button>
         <div class="nav-sub" id="nav-teacher-sub" role="group" aria-labelledby="nav-teacher-btn">
           <a href="./teacher/">講師向けTOP</a>
-          <a href="./course/">発声のしくみ講座</a>
           <a href="./teacher-support/">教え方・見立て方の個別相談</a>
         </div>
       </div>
@@ -524,60 +524,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">SERVICES</span>
-      <h2 class="section-title">3つの入口から、声と向き合う。</h2>
-      <p class="section-lead">「歌いたい方」と「教える方・深く学びたい方」、それぞれの入口を用意しています。</p>
+      <h2 class="section-title">歌う・学ぶ・教える。3つの入口</h2>
+      <p class="section-lead">今の目的に合うところから始められます。</p>
     </div>
 
     <div class="service-grid">
 
       <article class="service-card">
-        <span class="service-tag">歌いたい方へ</span>
-        <h3>マンツーマン対面レッスン</h3>
-        <p class="for">▶ 趣味でも自分の声ときちんと向き合い、無理なく長く歌いたい大人の方へ</p>
-        <p>高音、声量、音程、歌声へのコンプレックス。今の声を否定するのではなく、できていることを確認しながら、次に試す方法を一緒に探します。千葉駅・稲毛駅前のスタジオで、安心して大きな声が出せる環境を用意しています。</p>
+        <span class="service-tag">歌いたい</span>
+        <h3>マンツーマンレッスン</h3>
+        <p>自分の声と目標に合わせて、じっくり取り組みたい方へ。</p>
         <ul class="service-feats">
           <li>完全マンツーマン／50分</li>
-          <li>柔軟なカリキュラム（J-POP〜洋楽・声楽まで）</li>
           <li>千葉駅・稲毛駅前のプロ仕様スタジオ</li>
           <li>オンライン（Google Meet）全国対応</li>
-          <li>レッスン後のLINEフォロー付き</li>
         </ul>
         <div class="service-meta">
-          <strong>体験レッスン：3,000円</strong>（50分・スタジオ代込）<br>
-          単発：6,000円／月2回：11,000円／継続チケットあり
+          <strong>体験レッスン：3,000円</strong>（50分・スタジオ代込）
         </div>
-        <a href="./lesson/" class="btn btn-primary">マンツーマンの詳細 →</a>
+        <a href="./lesson/" class="btn btn-primary">マンツーマンを見る →</a>
       </article>
 
       <article class="service-card">
-        <span class="service-tag">講師・講師志望者向け</span>
+        <span class="service-tag">しくみから学びたい</span>
         <h3>発声のしくみ講座</h3>
-        <p class="for" style="font-size:0.78rem;">〜その練習、なぜ効く？に答えられる講師になる／音声学で読み解く〜</p>
-        <p class="for">▶ ボイトレ講師・講師志望者／発声を深く理解したい方へ</p>
-        <p>「なぜこの練習で声が変わるのか」「うまくいかないときの次の一手」を、音声学で説明できるようになる少人数オンライン講座。体感と理論をつなぐ、根拠ある指導と学びへ。</p>
+        <p>声の変化を、体感と理論の両方から理解したい方へ。講師になると決めていなくても参加できます。</p>
         <ul class="service-feats">
-          <li>全10回／5回×2ブロックの段階構成</li>
-          <li>Discord（非同期）＋ Google Meet（ライブ）</li>
-          <li>開講時期は決まり次第ご案内します</li>
-          <li>現象から"逆引き"で学ぶトラブルシュート型</li>
-          <li>まずは単発ワークショップから体験できます</li>
+          <li>テーマ別・90分の単発講座</li>
+          <li>気になるテーマだけ受講できます</li>
+          <li>オンライン開催</li>
         </ul>
         <div class="service-meta">
-          受講料・日程は決まり次第、講座ページでご案内します。
+          次回開催は決まり次第ご案内します。
         </div>
-        <a href="./course/" class="btn btn-primary">発声のしくみ講座の詳細 →</a>
+        <a href="./course/" class="btn btn-primary">講座を見る →</a>
       </article>
 
-      <article class="service-card wide quiet">
-        <span class="service-tag">ボイストレーナー・講師を目指す方へ／すでに教えている方へ</span>
-        <h3>講師・講師志望の方へ</h3>
-        <p class="for">▶ 歌を教える仕事に興味がある方、すでに教えている方へ</p>
-        <p>ボイストレーナーになるために、いきなり生活を大きく変える必要はありません。仕事や学業、音楽活動を続けながら、空いている時間から小さく始めることもできます。学ぶ、身近な一人に教えてみる、スクールで数を経験する、自分でも集める——という4つのステップで、いまの現在地と次の一歩を確かめられるページをご用意しています。</p>
+      <article class="service-card">
+        <span class="service-tag">教えたい・教えている</span>
+        <h3>講師向けサポート</h3>
+        <p>これから教え始めたい方、すでに指導している方へ。学びと個別相談から、今の課題に合う入口を選べます。</p>
         <ul class="service-feats">
-          <li>講師になるまでの4つのステップ</li>
-          <li>教え方・見立て方の個別相談（60分・9,800円税込）</li>
+          <li>教え始めるまでの4つのステップ</li>
+          <li>教え方・見立て方の個別相談</li>
+          <li>オンライン・マンツーマン／60分</li>
         </ul>
-        <a href="./teacher/" class="btn btn-outline">講師・講師志望の方へ →</a>
+        <div class="service-meta">
+          個別相談：<strong>9,800円（税込）</strong>／60分
+        </div>
+        <a href="./teacher/" class="btn btn-primary">講師向けTOPを見る →</a>
       </article>
 
     </div>
@@ -666,7 +661,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </a>
       <a href="./course/" class="news-card">
         <div class="news-date">2026.08</div>
-        <div class="news-title">【新講座】発声のしくみ講座（全10回）開講時期は決まり次第ご案内・8月に入門WS開催</div>
+        <div class="news-title">【講座】発声のしくみ講座はテーマ別90分の単発講座です・次回は決まり次第ご案内</div>
       </a>
     </div>
   </div>
