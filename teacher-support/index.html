@@ -805,7 +805,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="form-actions">
         <!-- 申込フォーム（Googleフォーム）。URLを変更するときはこの1か所のみ -->
-        <a id="form-cta" href="https://forms.gle/TTfXwsizgnpomUre6" target="_blank" rel="noopener" class="btn btn-primary" data-cta="teacher_support_bottom">Googleフォームで申し込む</a>
+        <a id="form-cta" href="https://forms.gle/TTfXwsizgnpomUre6" target="_blank" rel="noopener" class="btn btn-primary" data-cta="teacher_support_bottom" data-cta-event="teacher_consultation_apply_click">Googleフォームで申し込む</a>
       </div>
       <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
     </div>
@@ -866,11 +866,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   window.dataLayer.push({ event: 'teacher_consultation_view', page_path: PAGE_PATH });
 
   // 申込CTAクリック（送るのは押された場所だけ。入力内容・氏名・メールは扱いません）
+  // イベント名はボタンごとに data-cta-event で指定する。
+  // 申込フォームへ遷移するボタンだけを teacher_consultation_apply_click とし、
+  // サイト内リンクやLINEへの遷移は teacher_nav_click として分けている（申込数を過大に数えないため）。
   var ctas = document.querySelectorAll('[data-cta]');
   for (var i = 0; i < ctas.length; i++) {
     ctas[i].addEventListener('click', function () {
       window.dataLayer.push({
-        event: 'teacher_consultation_apply_click',
+        event: this.getAttribute('data-cta-event') || 'teacher_nav_click',
         page_path: PAGE_PATH,
         cta_location: this.getAttribute('data-cta')
       });

@@ -636,11 +636,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (function () {
   window.dataLayer = window.dataLayer || [];
   var PAGE_PATH = location.pathname;
+  // イベント名はボタンごとに data-cta-event で指定する。
+  // 申込フォームへ遷移するボタンだけを teacher_consultation_apply_click とし、
+  // サイト内リンクやLINEへの遷移は teacher_nav_click として分けている（申込数を過大に数えないため）。
   var ctas = document.querySelectorAll('[data-cta]');
   for (var i = 0; i < ctas.length; i++) {
     ctas[i].addEventListener('click', function () {
       window.dataLayer.push({
-        event: 'teacher_consultation_apply_click',
+        event: this.getAttribute('data-cta-event') || 'teacher_nav_click',
         page_path: PAGE_PATH,
         cta_location: this.getAttribute('data-cta')
       });
