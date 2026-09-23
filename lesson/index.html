@@ -362,16 +362,10 @@ a { color: inherit; text-decoration: none; }
 }
 .price-table thead th:not(:first-child) { text-align: right; }
 .price-table tbody td:first-child { text-align: left; color: var(--ink); font-weight: 700; }
+.price-table tbody td.total { text-align: right; color: var(--deep); font-weight: 900; white-space: nowrap; }
+.price-table tbody td.total .save { display: block; font-size: 0.72rem; color: var(--rose); font-weight: 700; margin-top: 3px; }
 .price-table tbody td.per { text-align: right; color: var(--rose); font-weight: 800; white-space: nowrap; }
-.price-table tbody td.per small { display: block; font-size: 0.7rem; color: var(--sub); font-weight: 600; margin-top: 2px; }
-.price-table tbody td:last-child { text-align: right; color: var(--deep); font-weight: 900; white-space: nowrap; }
 .price-table .sub { display: block; font-size: 0.78rem; color: var(--sub); font-weight: 500; margin-top: 4px; }
-.price-table .badge {
-  display: inline-block; margin-left: 8px;
-  padding: 2px 8px; border-radius: 4px;
-  background: var(--grad2); color: var(--rose);
-  font-size: 0.72rem; font-weight: 800;
-}
 .price-table tr.recommend { background: #fff5f9; }
 @media (max-width: 700px) {
   .trial-box .price small { display: block; margin-top: 4px; }
@@ -382,13 +376,12 @@ a { color: inherit; text-decoration: none; }
   .price-table tbody tr:last-child { border-bottom: none; }
   .price-table tbody td { border-bottom: none; padding: 4px 16px; text-align: left !important; }
   .price-table tbody td:first-child { font-size: 1rem; padding-top: 14px; }
-  .price-table tbody td.per::before,
-  .price-table tbody td:last-child::before {
+  .price-table tbody td.total::before,
+  .price-table tbody td.per::before {
     content: attr(data-label); display: inline-block; min-width: 6.2em;
     font-size: 0.76rem; font-weight: 800; color: var(--sub); letter-spacing: 0.04em;
   }
-  .price-table tbody td.per small { display: inline; margin-left: 6px; }
-  .price-table .badge { display: inline-block; margin: 6px 0 0; }
+  .price-table tbody td.total .save { display: inline; margin-left: 6px; }
   .price-table .sub { margin-top: 6px; }
 }
 .price-msg {
@@ -849,41 +842,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <thead>
         <tr>
           <th>コース</th>
-          <th>1回あたり</th>
           <th>合計（税込・スタジオ代込）</th>
+          <th>1回あたり</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>単発レッスン（50分）<span class="sub">気軽にお試ししたい方に</span></td>
+          <td class="total" data-label="合計">¥6,000</td>
           <td class="per" data-label="1回あたり">¥6,000</td>
-          <td data-label="合計（税込）">¥6,000</td>
         </tr>
         <tr class="recommend">
           <td>
-            月2回コース（50分 × 2回）<span class="badge">🏆 まずはこちらから</span>
+            月2回コース（50分 × 2回）
             <span class="sub">継続して通いたい初心者の方に</span>
           </td>
+          <td class="total" data-label="合計">¥11,000 <small class="save">1,000円お得</small></td>
           <td class="per" data-label="1回あたり">¥5,500</td>
-          <td data-label="合計（税込）">¥11,000</td>
         </tr>
         <tr>
           <td>チケット5回分<span class="sub">継続学習に</span></td>
-          <td class="per" data-label="1回あたり">¥5,700 <small>▲5%</small></td>
-          <td data-label="合計（税込）">¥28,500</td>
+          <td class="total" data-label="合計">¥28,500 <small class="save">1,500円お得</small></td>
+          <td class="per" data-label="1回あたり">¥5,700</td>
         </tr>
         <tr class="recommend">
           <td>
-            チケット10回分<span class="badge">💎 じっくり取り組みたい方へ</span>
+            チケット10回分
             <span class="sub">回数をまとめて確保したい方に</span>
           </td>
-          <td class="per" data-label="1回あたり">¥5,500 <small>▲8%</small></td>
-          <td data-label="合計（税込）">¥55,000</td>
+          <td class="total" data-label="合計">¥55,000 <small class="save">5,000円お得</small></td>
+          <td class="per" data-label="1回あたり">¥5,500</td>
         </tr>
         <tr>
           <td>チケット15回分<span class="sub">じっくり長期で取り組みたい方に</span></td>
-          <td class="per" data-label="1回あたり">¥5,300 <small>▲12%</small></td>
-          <td data-label="合計（税込）">¥79,500</td>
+          <td class="total" data-label="合計">¥79,500 <small class="save">10,500円お得</small></td>
+          <td class="per" data-label="1回あたり">¥5,300</td>
         </tr>
       </tbody>
     </table>
@@ -894,6 +887,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <p class="price-note">
       ※すべて税込・スタジオ代込みの料金です。<br>
+      ※「お得」の金額は、単発レッスン（¥6,000／回）で同じ回数を受講した場合との差額です。<br>
       ※前日までのキャンセルは振替可能。当日キャンセルはレッスン料の100%を申し受けます（特商法に基づく表記参照）。<br>
       ※チケットの有効期限は購入から1年間が目安です。長期で消化が難しい場合はご相談ください。<br>
       ※開講日程：土日・平日夜を中心に開講。日時はご相談ください。
