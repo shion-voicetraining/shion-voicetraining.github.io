@@ -50,7 +50,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {"@type":"Question","name":"どんなジャンルの曲でも教えてもらえますか？","acceptedAnswer":{"@type":"Answer","text":"J-POP、洋楽、アニソン、ジャズ、声楽など幅広く対応します。歌いたい曲を持ってきていただければ、その曲で実践していきます。"}},
     {"@type":"Question","name":"オンラインレッスンと対面、どちらがおすすめですか？","acceptedAnswer":{"@type":"Answer","text":"スタジオで思いっきり声を出せる対面が基本おすすめですが、遠方の方やご事情のある方はオンライン（Google Meet）でも同じ内容で受講いただけます。"}},
     {"@type":"Question","name":"体験レッスンの予約方法を教えてください","acceptedAnswer":{"@type":"Answer","text":"LINE公式アカウント（@woa7639t）からのご予約が最もスムーズです。メール（shion.vocal@gmail.com）でも受け付けています。希望日時を2〜3候補お送りください。"}},
-    {"@type":"Question","name":"キャンセル規定は？","acceptedAnswer":{"@type":"Answer","text":"3日前まで：キャンセル料なし／前々日・前日：1,500円／当日：レッスン1回分（チケット・月謝は1回分を消化）。体調不良など急なご事情がある場合は、無理のない範囲でご相談ください。"}}
+    {"@type":"Question","name":"キャンセル規定は？","acceptedAnswer":{"@type":"Answer","text":"3日前まで：キャンセル料なし／前々日・前日：1,500円／当日：レッスン1回分（回数券・月2回コースは1回分を消化）。体調不良など急なご事情がある場合は、無理のない範囲でご相談ください。"}}
   ]
 }
 </script>
@@ -71,9 +71,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "name": "マンツーマンレッスン料金",
     "itemListElement": [
       {"@type": "Offer", "name": "体験レッスン（50分）", "price": "3000", "priceCurrency": "JPY"},
-      {"@type": "Offer", "name": "単発レッスン（50分）", "price": "6000", "priceCurrency": "JPY"},
-      {"@type": "Offer", "name": "月2回コース", "price": "11000", "priceCurrency": "JPY"},
-      {"@type": "Offer", "name": "チケット10回", "price": "55000", "priceCurrency": "JPY"}
+      {"@type": "Offer", "name": "対面 単発レッスン（60分）", "price": "6500", "priceCurrency": "JPY", "validFrom": "2026-11-01"},
+      {"@type": "Offer", "name": "対面 月2回コース（60分×2回・月額）", "price": "12000", "priceCurrency": "JPY", "validFrom": "2026-11-01"},
+      {"@type": "Offer", "name": "対面 回数券5回（60分）", "price": "28500", "priceCurrency": "JPY", "validFrom": "2026-11-01"},
+      {"@type": "Offer", "name": "対面 回数券10回（60分）", "price": "55000", "priceCurrency": "JPY", "validFrom": "2026-11-01"},
+      {"@type": "Offer", "name": "対面 回数券15回（60分）", "price": "79500", "priceCurrency": "JPY", "validFrom": "2026-11-01"},
+      {"@type": "Offer", "name": "オンライン個人レッスン（60分）", "price": "5500", "priceCurrency": "JPY", "validFrom": "2026-11-01"}
     ]
   }
 }
@@ -366,6 +369,20 @@ a { color: inherit; text-decoration: none; }
 .price-table tbody td.per { text-align: right; color: var(--rose); font-weight: 800; white-space: nowrap; }
 .price-table .sub { display: block; font-size: 0.78rem; color: var(--sub); font-weight: 500; margin-top: 4px; }
 .price-table tr.recommend { background: #fff5f9; }
+.price-effective {
+  background: #fff; border: 1px solid var(--pink); border-radius: 12px;
+  padding: 12px 16px; font-size: 0.86rem; color: var(--ink); margin: 0 0 16px;
+}
+.price-effective strong { color: var(--deep); }
+.price-subhead { font-size: 1.02rem; font-weight: 800; color: var(--deep); margin: 8px 0 10px; }
+.online-price {
+  background: #fff; border-radius: 16px; box-shadow: var(--shadow);
+  padding: 18px 20px; margin-top: 10px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px 16px; flex-wrap: wrap;
+}
+.online-price .ttl { font-weight: 800; color: var(--ink); }
+.online-price .d { font-size: 0.82rem; color: var(--sub); margin-top: 4px; }
+.online-price .p { font-weight: 900; color: var(--deep); font-size: 1.1rem; white-space: nowrap; }
 @media (max-width: 700px) {
   .trial-box .price small { display: block; margin-top: 4px; }
   .price-table { box-shadow: none; border: 1px solid var(--line); }
@@ -680,7 +697,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <div class="lesson-summary">
     <div><div class="k">STYLE</div><div class="v">完全マンツーマン</div></div>
-    <div><div class="k">DURATION</div><div class="v">1回50分</div></div>
+    <div><div class="k">DURATION</div><div class="v">1回60分</div></div>
     <div><div class="k">LOCATION</div><div class="v">千葉駅・稲毛駅前</div></div>
     <div><div class="k">FOR</div><div class="v">大人・初心者歓迎</div></div>
   </div>
@@ -794,7 +811,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">FLOW</span>
-      <h2 class="section-title">1回のレッスンの流れ（50分）</h2>
+      <h2 class="section-title">1回のレッスンの流れ（60分）</h2>
     </div>
 
     <div class="flow-list">
@@ -809,7 +826,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p>声帯・共鳴を意識した基礎エクササイズ</p>
       </div>
       <div class="flow-step">
-        <div class="min">20分</div>
+        <div class="min">30分</div>
         <h3>好きな曲で実践</h3>
         <p>選曲した楽曲で歌唱トレーニング</p>
       </div>
@@ -828,7 +845,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="section-head">
       <span class="eyebrow">PRICING</span>
       <h2 class="section-title">レッスン料金</h2>
-      <p class="section-lead">すべて税込・スタジオ代込みのわかりやすい料金です。</p>
+      <p class="section-lead">すべて税込です。対面レッスンの料金はスタジオ代込みです。</p>
     </div>
 
     <div class="trial-box">
@@ -837,6 +854,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="desc">現在のお悩みや歌いたい曲を伺い、実際に声を出しながら、これからの練習の方向を一緒に整理します。<br>50分・プロ仕様リハーサルスタジオ・スタジオ代込です。</p>
     </div>
 
+    <p class="price-effective">
+      <strong>2026年11月1日以降に新しくお申し込みいただく方の料金です。</strong><br>
+      10月31日までのお申し込みは改定前の料金でご案内します。すでに受講中の方の料金と、購入済みの回数券は変わりません。
+    </p>
+
+    <h3 class="price-subhead">対面レッスン（千葉駅・稲毛駅前）</h3>
     <table class="price-table">
       <thead>
         <tr>
@@ -847,47 +870,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </thead>
       <tbody>
         <tr>
-          <td>単発レッスン（50分）<span class="sub">気軽にお試ししたい方に</span></td>
-          <td class="total" data-label="合計">¥6,000</td>
-          <td class="per" data-label="1回あたり">¥6,000</td>
-        </tr>
-        <tr class="recommend">
-          <td>
-            月2回コース（50分 × 2回）
-            <span class="sub">継続して通いたい初心者の方に</span>
-          </td>
-          <td class="total" data-label="合計">¥11,000</td>
-          <td class="per" data-label="1回あたり">¥5,500</td>
+          <td>単発レッスン（60分）<span class="sub">1回ずつ受講したい方に</span></td>
+          <td class="total" data-label="合計">¥6,500</td>
+          <td class="per" data-label="1回あたり">¥6,500</td>
         </tr>
         <tr>
-          <td>チケット5回分<span class="sub">継続学習に</span></td>
+          <td>月2回コース（60分 × 2回）<span class="sub">対面のみ・毎月その月の初回レッスン時に現金でお支払い</span></td>
+          <td class="total" data-label="合計">¥12,000／月</td>
+          <td class="per" data-label="1回あたり">¥6,000</td>
+        </tr>
+        <tr>
+          <td>回数券 5回（60分 × 5回）<span class="sub">有効期限：購入日から1年間</span></td>
           <td class="total" data-label="合計">¥28,500</td>
           <td class="per" data-label="1回あたり">¥5,700</td>
         </tr>
-        <tr class="recommend">
-          <td>
-            チケット10回分
-            <span class="sub">回数をまとめて確保したい方に</span>
-          </td>
+        <tr>
+          <td>回数券 10回（60分 × 10回）<span class="sub">有効期限：購入日から1年間</span></td>
           <td class="total" data-label="合計">¥55,000</td>
           <td class="per" data-label="1回あたり">¥5,500</td>
         </tr>
         <tr>
-          <td>チケット15回分<span class="sub">じっくり長期で取り組みたい方に</span></td>
+          <td>回数券 15回（60分 × 15回）<span class="sub">有効期限：購入日から1年間</span></td>
           <td class="total" data-label="合計">¥79,500</td>
           <td class="per" data-label="1回あたり">¥5,300</td>
         </tr>
       </tbody>
     </table>
 
+    <h3 class="price-subhead" style="margin-top:24px;">オンラインレッスン（Google Meet）</h3>
+    <div class="online-price">
+      <div>
+        <div class="ttl">オンライン個人レッスン</div>
+        <div class="d">60分のマンツーマン指導です。全国から受講いただけます。</div>
+      </div>
+      <div class="p">¥5,500 <small>（税込・60分）</small></div>
+    </div>
+
     <div class="price-msg">
-      💡 <strong>講師より：</strong>発声の変化には個人差があります。定期的に取り組みたい方には<strong>月2回コース</strong>、回数をまとめて確保したい方には<strong>チケット</strong>をご用意しています。迷ったら、体験レッスンでご相談ください。
+      💡 <strong>講師より：</strong>1回ずつ受けたい方は単発レッスン、毎月のペースを決めて通いたい方は月2回コース、目標に向けて一定期間取り組みたい方は回数券、という選び方ができます。どれが合うかは、体験レッスンで現在の声を確認しながら一緒に考えます。
     </div>
 
     <p class="price-note">
-      ※すべて税込・スタジオ代込みの料金です。<br>
-      ※キャンセル：3日前までは無料／前々日・前日は1,500円／当日はレッスン1回分（チケット・月謝は1回分を消化）。体調不良など急なご事情の場合はご相談ください（特商法に基づく表記参照）。<br>
-      ※チケットの有効期限は購入から1年間が目安です。長期で消化が難しい場合はご相談ください。<br>
+      ※すべて税込です。対面レッスンはスタジオ代込みの料金です。<br>
+      ※お支払い：単発は当日現金または銀行振込／月2回コースは毎月その月の初回レッスン時に現金／回数券は購入時に一括で、PayPal（講師から決済リンクを個別にお送りします）・銀行振込・現金のいずれか／オンラインは事前の銀行振込またはPayPal。<br>
+      ※キャンセル：3日前までは無料／前々日・前日は1,500円／当日はレッスン1回分（回数券・月2回コースは1回分を消化）。体調不良など急なご事情の場合はご相談ください（特商法に基づく表記参照）。<br>
+      ※回数券の有効期限は購入日から1年間です。<br>
       ※開講日程：土日・平日夜を中心に開講。日時はご相談ください。
     </p>
 
@@ -1057,11 +1084,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="faq-item">
         <div class="faq-q">支払い方法は？</div>
-        <div class="faq-a">対面：レッスン当日に現金または銀行振込／オンライン：事前の銀行振込またはPayPal でお願いしています。チケットコースは初回時にまとめてのお支払いです。</div>
+        <div class="faq-a">対面の単発レッスン：レッスン当日に現金または銀行振込／月2回コース（対面のみ）：毎月、その月の初回レッスン時に現金／回数券（対面）：購入時に一括で、PayPal（講師から決済リンクを個別にお送りします）・銀行振込・現金のいずれか／オンライン：事前の銀行振込またはPayPal でお願いしています。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">キャンセル規定は？</div>
-        <div class="faq-a">3日前まで：キャンセル料なし／前々日・前日：1,500円／当日：レッスン1回分（チケット・月謝は1回分を消化）。体調不良や急なご事情がある場合もあると思いますので、無理のない範囲でご相談ください。詳細は<a href="../legal/#tokushou">特定商取引法に基づく表記</a>をご確認ください。</div>
+        <div class="faq-a">3日前まで：キャンセル料なし／前々日・前日：1,500円／当日：レッスン1回分（回数券・月2回コースは1回分を消化）。体調不良や急なご事情がある場合もあると思いますので、無理のない範囲でご相談ください。詳細は<a href="../legal/#tokushou">特定商取引法に基づく表記</a>をご確認ください。</div>
       </div>
     </div>
   </div>
