@@ -1465,6 +1465,7 @@ function HowtoScreen({engine, state, settings}){
             {demoing ? "■ 止める" : "♪ 基準音を鳴らす（" + noteText(refMidi) + "）"}
           </button>
         </div>
+        {state.failed && <div className="notice" role="alert" style={{marginTop:"8px"}}>音を再生できませんでした。もう一度タップするか、ページを再読み込みしてください。</div>}
       </div>
 
       <div className="lead">🔧 うまくいかないとき</div>
