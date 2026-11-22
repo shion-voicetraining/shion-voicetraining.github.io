@@ -150,6 +150,508 @@ window.addEventListener("load", function(){
 });
 </script>
 
+<script id="straw-engine">
+/* ═══════════════════════════════════════════════════════════════
+   音源エンジン（Web Audio）
+   【設計理由】
+   - 時計は AudioContext.currentTime の1本だけ。音は数秒先まで予約し、画面も同じ時計を読む。
+     setInterval で秒を数える方式は、負荷がかかると遅れが積み上がるため使わない。
+   - 停止・一時停止は「その回の出力（session）」を丸ごと切り離す。予約済みの音も一緒に消える
+     ので、再開しても二重に鳴らない。
+   - 音はすべて合成（外部音源なし＝著作権・読み込み待ちの問題がない）。
+   - iPhoneの消音モード：無音の<audio>ループでページを「メディア再生」扱いにする（317a332 の対策を継承）。
+   Babelを通さない素のJS。DOMに依存しない計算は Core にまとめ、単体でテストできる。
+   ═══════════════════════════════════════════════════════════════ */
+(function(global){
+"use strict";
+
+var COUNT_IN = 4;        // 毎回の発声前の準備拍
+var ACCENT_EVERY = 4;
+var LOOKAHEAD_SEC = 5;   // 先読み量。画面の処理がこの秒数止まっても音は乱れない
+var TICK_MS = 100;
+var START_DELAY = 0.12;
+var LATE_GRACE = 0.04;   // これ以上遅れた打音は捨てる（まとめ鳴り防止）
+var END_TAIL = 1.6;      // 終了ベルの余韻
+var OUTPUT = 1.4;          // 全音量最大・全音重なりの実測ピークが0.9未満になる上限
+var STALL_MS = 1200;
+var RESUME_TIMEOUT_MS = 2500;
+
+/* ---------- Core：計算だけ ---------- */
+function midiToHz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
+function hzToMidi(hz){ return Math.round(69 + 12 * Math.log(hz / 440) / Math.LN2); }
+var NAMES = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+var KANA = ["ド","ド♯","レ","レ♯","ミ","ファ","ファ♯","ソ","ソ♯","ラ","ラ♯","シ"];
+function noteName(m){
+  var r = Math.round(m), i = ((r % 12) + 12) % 12;
+  return {abc: NAMES[i] + (Math.floor(r / 12) - 1), kana: KANA[i]}; // C4＝中央のド
+}
+
+/* 音階9音を拍（足りなければ8分音符）の格子に割り付ける。余りは頂点→両端の順に長くする */
+var SCALE = [0,2,4,5,7,5,4,2,0];
+var EXTRA_ORDER = [4,0,8,2,6,1,7,3,5];
+function scaleSlots(beats){
+  var sub = 1;
+  while(beats * sub < SCALE.length) sub *= 2;
+  var units = beats * sub, base = Math.floor(units / SCALE.length), rem = units % SCALE.length;
+  var len = SCALE.map(function(){ return base; });
+  for(var i = 0; i < rem; i++) len[EXTRA_ORDER[i]]++;
+  var at = 0;
+  return len.map(function(n, j){ var o = {beat: at / sub, semi: SCALE[j]}; at += n; return o; });
+}
+
+/* 発声1本分の音の動き。points は [発声開始からの秒, MIDI番号]。
+   MIDI番号で直線補間する＝耳に均等なグライドになる */
+function contour(mode, midi, beats, beat){
+  var end = beats * beat;
+  if(mode === "scale"){
+    return {step: true, end: end, points: scaleSlots(beats).map(function(s){ return [s.beat * beat, midi + s.semi]; })};
+  }
+  if(mode === "glideUpDown") return {step: false, end: end, points: [[0, midi], [end / 2, midi + 12], [end, midi]]};
+  if(mode === "glide2oct"){
+    var top = Math.round(beats * 0.6 * 2) / 2 * beat; // 頂点は拍か裏拍に乗せる
+    return {step: false, end: end, points: [[0, midi], [top, midi + 24], [end, midi]]};
+  }
+  return {step: false, end: end, points: [[0, midi], [end, midi]]};
+}
+function midiAt(c, t){
+  var p = c.points;
+  if(t <= p[0][0]) return p[0][1];
+  for(var i = p.length - 1; i >= 0; i--){
+    if(t + 1e-7 < p[i][0]) continue;
+    if(c.step || i === p.length - 1) return p[i][1];
+    return p[i][1] + (p[i+1][1] - p[i][1]) * (t - p[i][0]) / (p[i+1][0] - p[i][0]);
+  }
+  return p[0][1];
+}
+
+/* 秒数の負荷を保ったまま拍に丸める。休憩には必ず4拍の準備が入る */
+function timing(ex, bpm){
+  var beat = 60 / bpm;
+  var work = Math.max(1, Math.round(ex.workSec / beat));
+  var gap = Math.max(COUNT_IN, Math.round(ex.restSec / beat));
+  return {beat: beat, work: work, rest: gap - COUNT_IN, workSec: work * beat};
+}
+
+/* o = {bpm, transpose, guide:"sustain"|"before"|"every4", reps, from} */
+function buildPlan(ex, o){
+  var tm = timing(ex, o.bpm), beat = tm.beat, from = o.from || 1;
+  var phases = [], events = [], at = 0; // at は拍。掛け算で秒にするので誤差が積もらない
+  function add(e){ events.push(e); }
+  function phase(kind, rep, beats, midi, c){
+    var p = {kind: kind, rep: rep, startBeat: at, beats: beats, start: at * beat, end: (at + beats) * beat, midi: midi, contour: c || null};
+    phases.push(p);
+    for(var i = 0; i < beats; i++){
+      add({type: "click", at: (at + i) * beat, accent: kind !== "rest" && i % ACCENT_EVERY === 0, soft: kind === "rest"});
+    }
+    at += beats;
+    return p;
+  }
+  var base = hzToMidi(ex.toneHz) + o.transpose;
+  for(var rep = from; rep <= o.reps; rep++){
+    var midi = base + (ex.semitone ? rep - 1 : 0);
+    if(rep > from && tm.rest > 0) phase("rest", rep - 1, tm.rest, midi);
+
+    var prep = phase("prep", rep, COUNT_IN, midi);
+    // 目標音は準備の1拍目と3拍目。発声開始までに自然に消える長さ
+    add({type: "note", at: prep.start, midi: midi, dur: 2 * beat, level: 1});
+    add({type: "note", at: prep.start + 2 * beat, midi: midi, dur: 2 * beat, level: 0.8});
+
+    var c = contour(ex.toneMode, midi, tm.work, beat);
+    var work = phase("work", rep, tm.work, midi, c);
+    add({type: "bell", at: work.start, midi: midi, end: false});
+    if(o.guide === "sustain"){
+      add({type: "sustain", at: work.start, until: work.end, contour: c, swell: ex.toneMode === "swell", level: 1});
+      var strikes = c.step ? c.points : [c.points[0]];
+      strikes.forEach(function(p){ add({type: "note", at: work.start + p[0], midi: p[1], dur: Math.min(1.2, 2 * beat), level: 0.38}); });
+    } else if(o.guide === "every4"){
+      for(var i = 0; i < tm.work; i += ACCENT_EVERY){
+        add({type: "note", at: work.start + i * beat, midi: midiAt(c, i * beat), dur: Math.min(2 * beat, work.end - work.start - i * beat), level: 0.6});
+      }
+    }
+    add({type: "bell", at: work.end, midi: midi, end: true});
+  }
+  events.sort(function(a, b){ return a.at - b.at; });
+  return {phases: phases, events: events, beat: beat, total: at * beat, reps: o.reps};
+}
+
+function locate(plan, t){
+  var p = plan.phases, i = 0;
+  while(i < p.length - 1 && t >= p[i].end) i++;
+  var ph = p[i], into = Math.min(ph.end - ph.start, Math.max(0, t - ph.start));
+  return {phase: ph, into: into, beat: Math.min(ph.beats - 1, Math.floor(into / plan.beat + 1e-7)),
+          progress: into / (ph.end - ph.start), left: ph.end - ph.start - into};
+}
+
+/* ---------- 音色 ---------- */
+function render(ctx, sec, fn){
+  var n = Math.ceil(ctx.sampleRate * sec), buf = ctx.createBuffer(1, n, ctx.sampleRate), d = buf.getChannelData(0);
+  var fade = Math.floor(ctx.sampleRate * 0.01);
+  for(var i = 0; i < n; i++) d[i] = fn(i / ctx.sampleRate) * Math.min(1, (n - 1 - i) / fade);
+  return buf;
+}
+/* ウッドブロック：少し下がる基音＋すぐ消える非整数倍音 */
+function wood(ctx, hz){
+  var TAU = Math.PI * 2;
+  return render(ctx, 0.14, function(t){
+    var atk = Math.min(1, t / 0.0015);
+    var body = Math.sin(TAU * (hz * t + hz * 0.0012 * (1 - Math.exp(-t / 0.008)))) * Math.exp(-t / 0.022);
+    var knock = Math.sin(TAU * hz * 1.58 * t) * Math.exp(-t / 0.007) * 0.3;
+    return atk * (body + knock) * 0.8;
+  });
+}
+function createKit(ctx){
+  var h = [0, 1, 0.5, 0.26, 0.12, 0.06, 0.025];
+  return {
+    click: wood(ctx, 900), accent: wood(ctx, 1200),
+    wave: ctx.createPeriodicWave(new Float32Array(h.length), new Float32Array(h))
+  };
+}
+
+function oscillator(ctx, hz, at, until, gain, type){
+  var o = ctx.createOscillator();
+  if(type) o.type = type;
+  o.frequency.value = hz;
+  o.connect(gain);
+  o.onended = function(){ o.disconnect(); gain.disconnect(); };
+  o.start(at); o.stop(until);
+  return o;
+}
+
+/* ピアノ系の打音：倍音ほど小さく、速く消える。音程がぶれないよう倍音は整数比 */
+var PIANO = [[1,0.62,1],[2,0.30,0.7],[3,0.13,0.5],[4,0.07,0.35],[5,0.03,0.25]];
+function playNote(ctx, out, e, at){
+  var hz = midiToHz(e.midi), dur = Math.max(0.15, e.dur);
+  PIANO.forEach(function(p){
+    var g = ctx.createGain(), end = at + dur, tau = Math.min(0.75, dur * 0.4) * p[2];
+    var peak = 0.34 * e.level * p[1];
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(peak, at + 0.008);
+    g.gain.setTargetAtTime(0, at + 0.008, tau);
+    // 次の音にかぶらないよう最後は確実に0へ。setTargetの到達値から直線で落とす
+    var rel = end - 0.06;
+    g.gain.setValueAtTime(peak * Math.exp(-(rel - at - 0.008) / tau), rel);
+    g.gain.linearRampToValueAtTime(0, end);
+    g.connect(out);
+    oscillator(ctx, hz * p[0], at, end + 0.01, g);
+  });
+}
+
+function playSustain(ctx, kit, out, e, at, until, offset){
+  var c = e.contour, g = ctx.createGain(), peak = 0.15 * e.level;
+  var atk = Math.min(0.15, (until - at) / 3), rel = Math.min(0.22, (until - at) / 3);
+  g.gain.setValueAtTime(0, at);
+  if(e.swell){
+    var mid = at - offset + c.end / 2;
+    g.gain.linearRampToValueAtTime(peak * 0.3, at + atk);
+    if(mid > at + atk && mid < until - rel) g.gain.linearRampToValueAtTime(peak * 1.35, mid);
+    g.gain.linearRampToValueAtTime(peak * 0.3, until - rel);
+  } else {
+    g.gain.linearRampToValueAtTime(peak, at + atk);
+    g.gain.setValueAtTime(peak, until - rel);
+  }
+  g.gain.linearRampToValueAtTime(0, until); // フェードは終了時刻ちょうどに終わる
+  g.connect(out);
+
+  var o = ctx.createOscillator(), origin = at - offset;
+  o.setPeriodicWave(kit.wave);
+  o.frequency.setValueAtTime(midiToHz(midiAt(c, offset)), at);
+  c.points.forEach(function(p){
+    var t = origin + p[0];
+    if(t <= at) return;
+    if(c.step) o.frequency.setTargetAtTime(midiToHz(p[1]), t, 0.008); // 8msでつなぎ、プチ音を防ぐ
+    else o.frequency.exponentialRampToValueAtTime(midiToHz(p[1]), t);
+  });
+  o.connect(g);
+  o.onended = function(){ o.disconnect(); g.disconnect(); };
+  o.start(at); o.stop(until + 0.01);
+}
+
+/* ベル：目標音と同じ音名にして音程の邪魔をしない。開始＝高い1音、終了＝5度→主音へ下がる2音 */
+function playBell(ctx, out, e, at){
+  var m = e.midi;
+  while(m < 81) m += 12;
+  while(m >= 93) m -= 12;
+  var hits = e.end ? [[m - 5, 0, 0.5, 0.12], [m - 12, 0.16, 1.1, 0.14]] : [[m, 0, 0.7, 0.15]];
+  hits.forEach(function(h){
+    [[1, 1, 1], [2, 0.18, 0.5], [2.76, 0.08, 0.2]].forEach(function(p){
+      var g = ctx.createGain(), t = at + h[1], d = h[2] * p[2];
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(h[3] * p[1], t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      g.connect(out);
+      oscillator(ctx, midiToHz(h[0]) * p[0], t, t + d + 0.01, g);
+    });
+  });
+}
+
+function scheduleEvent(ctx, kit, buses, e, origin){
+  var now = ctx.currentTime, at = origin + e.at;
+  if(e.type === "sustain"){ // 持続音だけは遅れても途中から合流する
+    var until = origin + e.until, start = Math.max(at, now);
+    if(until - start > 0.05) playSustain(ctx, kit, buses.guide, e, start, until, start - at);
+    return;
+  }
+  if(at < now - LATE_GRACE) return;
+  at = Math.max(at, now);
+  if(e.type === "click"){
+    var s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = e.accent ? kit.accent : kit.click;
+    g.gain.value = e.accent ? 0.48 : e.soft ? 0.17 : 0.3;
+    s.connect(g); g.connect(buses.click);
+    s.onended = function(){ s.disconnect(); g.disconnect(); };
+    s.start(at);
+  } else if(e.type === "note") playNote(ctx, buses.guide, e, at);
+  else if(e.type === "bell") playBell(ctx, buses.bell, e, at);
+}
+
+function curve(v){ return Math.pow(v / 100, 1.5); }
+function createMixer(ctx, vol){
+  var master = ctx.createGain(), click = ctx.createGain(), guide = ctx.createGain(), bell = ctx.createGain();
+  click.connect(master); guide.connect(master); bell.connect(master); master.connect(ctx.destination);
+  master.gain.value = OUTPUT * curve(vol.master); click.gain.value = curve(vol.click); guide.gain.value = curve(vol.guide);
+  return {click: click, guide: guide, bell: bell, set: function(v){
+    var t = ctx.currentTime;
+    master.gain.setTargetAtTime(OUTPUT * curve(v.master), t, 0.015);
+    click.gain.setTargetAtTime(curve(v.click), t, 0.015);
+    guide.gain.setTargetAtTime(curve(v.guide), t, 0.015);
+  }};
+}
+function createSession(ctx, mixer){
+  var s = {click: ctx.createGain(), guide: ctx.createGain(), bell: ctx.createGain()};
+  ["click","guide","bell"].forEach(function(k){ s[k].connect(mixer[k]); });
+  s.cut = function(){
+    var t = ctx.currentTime;
+    ["click","guide","bell"].forEach(function(k){
+      s[k].gain.setValueAtTime(1, t);
+      s[k].gain.linearRampToValueAtTime(0, t + 0.025);
+    });
+    setTimeout(function(){ ["click","guide","bell"].forEach(function(k){ s[k].disconnect(); }); }, 60);
+  };
+  return s;
+}
+
+/* ---------- iPhone消音モード対策 ---------- */
+function silentWav(){
+  var sr = 44100, size = sr * 2, v = new DataView(new ArrayBuffer(44 + size));
+  function text(at, s){ for(var i = 0; i < s.length; i++) v.setUint8(at + i, s.charCodeAt(i)); }
+  text(0,"RIFF"); v.setUint32(4,36+size,true); text(8,"WAVE"); text(12,"fmt ");
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  text(36,"data"); v.setUint32(40,size,true);
+  return new Blob([v.buffer], {type:"audio/wav"});
+}
+function MediaChannel(){
+  var el = null, started = false, want = false;
+  this.hold = function(){
+    want = true;
+    if(!el){
+      el = document.createElement("audio");
+      el.src = URL.createObjectURL(silentWav());
+      el.loop = true; // muted や volume=0 にすると効果がなくなる。中身が無音なのでそのまま流す
+      el.setAttribute("playsinline", "");
+      el.setAttribute("x-webkit-airplay", "deny");
+      el.disableRemotePlayback = true;
+      el.hidden = true;
+      document.body.appendChild(el);
+    }
+    try{
+      var p = el.play();
+      if(p && p.then) p.then(function(){ if(want) started = !el.paused; else el.pause(); }, function(){ started = false; });
+    }catch(e){ started = false; }
+  };
+  this.release = function(){ want = false; started = false; if(el) el.pause(); };
+  this.interrupted = function(){ return started && el.paused; };
+}
+
+/* ---------- 再生制御 ---------- */
+function Engine(){
+  var self = this, media = new MediaChannel();
+  var ctx = null, kit = null, mixer = null, session = null, stale = false;
+  var timer = null, tail = null, gen = 0, listeners = [];
+  var plan = null, job = null, origin = 0, next = 0, clock = null, lastTime = 0, lastMoved = 0, wake = null, volumes = null;
+  self.state = {status: "idle"}; // idle | starting | running | paused | done | error | demo
+
+  function emit(state){ self.state = state; listeners.forEach(function(f){ f(state); }); }
+  self.subscribe = function(f){ listeners.push(f); return function(){ listeners = listeners.filter(function(x){ return x !== f; }); }; };
+
+  function setWake(on){
+    if(!on){ if(wake){ try{ wake.release(); }catch(e){} wake = null; } return; }
+    if(!navigator.wakeLock || wake) return;
+    var g = gen;
+    navigator.wakeLock.request("screen").then(function(w){
+      if(g !== gen) w.release(); else wake = w;
+    }, function(){});
+  }
+  function halt(keepTail){
+    gen++;
+    clearInterval(timer); timer = null;
+    clearTimeout(tail); tail = null;
+    setWake(false);
+    var s = session; session = null;
+    if(keepTail && s){
+      tail = setTimeout(function(){ tail = null; s.cut(); media.release(); }, END_TAIL * 1000);
+      // 余韻中に停止・再開されたら、その時点で切る
+      session = s;
+    } else {
+      if(s) s.cut();
+      media.release();
+    }
+  }
+  function discard(){
+    if(!ctx) return;
+    try{ var p = ctx.close(); if(p && p.catch) p.catch(function(){}); }catch(e){}
+    ctx = null;
+  }
+
+  /* 必ずタップ処理の中から同期的に呼ぶ（iOSは await の後では音を解禁しない） */
+  function unlock(){
+    try{ if(navigator.audioSession) navigator.audioSession.type = "playback"; }catch(e){}
+    media.hold();
+    if(stale || (ctx && ctx.state === "closed")){ discard(); stale = false; }
+    if(!ctx){
+      var AC = global.AudioContext || global.webkitAudioContext;
+      if(!AC) return Promise.reject(new Error("no web audio"));
+      ctx = new AC();
+      kit = createKit(ctx);
+      mixer = createMixer(ctx, volumes);
+    } else mixer.set(volumes);
+    var c = ctx, id;
+    var timeout = new Promise(function(_, ng){ id = setTimeout(function(){ ng(new Error("resume timeout")); }, RESUME_TIMEOUT_MS); });
+    return Promise.race([c.resume(), timeout]).then(function(){ clearTimeout(id); return c; }, function(e){ clearTimeout(id); throw e; });
+  }
+
+  function schedule(){
+    if(!session || !ctx) return;
+    var until = ctx.currentTime - origin + LOOKAHEAD_SEC;
+    while(next < plan.events.length && plan.events[next].at < until) scheduleEvent(ctx, kit, session, plan.events[next++], origin);
+  }
+  function tick(){
+    if(self.state.status !== "running") return;
+    if(!job.silent){
+      if(ctx.currentTime !== lastTime){ lastTime = ctx.currentTime; lastMoved = performance.now(); }
+      else if(performance.now() - lastMoved > STALL_MS){ self.pause("interrupted"); return; }
+      if(media.interrupted()){ self.pause("interrupted"); return; }
+      schedule();
+    }
+    if(self.position() >= plan.total){
+      var done = job;
+      halt(true);
+      emit({status: "done", job: done});
+      if(done.onComplete) done.onComplete();
+    }
+  }
+
+  function play(){
+    halt(false);
+    var g = gen;
+    plan = buildPlan(job.ex, job);
+    next = 0;
+    emit({status: "starting", job: job, plan: plan});
+    function go(audio){
+      if(g !== gen) return;
+      if(audio){
+        session = createSession(audio, mixer);
+        clock = function(){ return audio.currentTime; };
+        lastTime = audio.currentTime; lastMoved = performance.now();
+      } else clock = function(){ return performance.now() / 1000; };
+      origin = clock() + START_DELAY;
+      if(audio) schedule();
+      setWake(true);
+      timer = setInterval(tick, TICK_MS);
+      emit({status: "running", job: job, plan: plan});
+    }
+    if(job.silent){ go(null); return; } // 画面だけの練習では音の出力に一切触らない
+    var ready;
+    try{ ready = unlock(); }catch(e){ ready = Promise.reject(e); }
+    ready.then(go).catch(function(){
+      if(g !== gen) return;
+      halt(false); stale = true;
+      emit({status: "error", job: job, plan: plan});
+    });
+  }
+
+  self.start = function(next){
+    job = Object.assign({from: 1}, next);
+    volumes = job.volumes;
+    play();
+  };
+  self.pause = function(reason){
+    var st = self.state.status;
+    if(st !== "running" && st !== "starting") return;
+    var t = st === "running" ? self.position() : 0, ph = locate(plan, t).phase;
+    // 休憩中なら次の本、それ以外は今の本の頭（準備4拍）から再開
+    var from = Math.min(job.reps, ph.kind === "rest" ? ph.rep + 1 : ph.rep);
+    halt(false);
+    if(reason) stale = true; // 中断されたAudioContextは復帰しないことがあるので作り直す
+    job = Object.assign({}, job, {from: from});
+    emit({status: "paused", job: job, plan: plan, at: t, reason: reason || ""});
+  };
+  self.resume = function(silent){
+    var st = self.state.status;
+    if(st !== "paused" && st !== "error") return;
+    if(silent) job = Object.assign({}, job, {silent: true});
+    play();
+  };
+  self.stop = function(){ halt(false); emit({status: "idle"}); };
+  self.position = function(){
+    if(!clock) return 0;
+    var lat = job && !job.silent && ctx ? Math.min(ctx.outputLatency || 0, 0.5) : 0; // 耳に届く時刻に画面を合わせる
+    return clock() - lat - origin;
+  };
+  self.setVolumes = function(v){
+    volumes = v;
+    if(job) job.volumes = v;
+    if(ctx && mixer) mixer.set(v);
+  };
+  self.hidden = function(){
+    stale = true;
+    if(self.state.status === "demo") self.stop();
+    else self.pause("hidden");
+  };
+
+  /* お手本・試聴 */
+  self.demo = function(o){
+    halt(false);
+    var g = gen;
+    volumes = o.volumes;
+    emit({status: "demo", id: o.id});
+    var ready;
+    try{ ready = unlock(); }catch(e){ ready = Promise.reject(e); }
+    ready.then(function(c){
+      if(g !== gen) return;
+      session = createSession(c, mixer);
+      var at = c.currentTime + START_DELAY, end;
+      function put(e){ scheduleEvent(c, kit, session, e, at); }
+      if(o.sound === "check"){
+        var beat = 60 / o.bpm;
+        for(var i = 0; i < 4; i++) put({type: "click", at: i * beat, accent: i === 0});
+        put({type: "note", at: 0, midi: o.midi, dur: 2 * beat, level: 1});
+        put({type: "bell", at: 4 * beat, midi: o.midi, end: false});
+        end = 4 * beat + 0.8;
+      } else {
+        var beats = Math.max(1, Math.round(o.sec / (60 / o.bpm))), b = 60 / o.bpm, k = contour(o.mode, o.midi, beats, b);
+        put({type: "note", at: 0, midi: o.midi, dur: Math.min(1.5, k.end), level: 0.9});
+        put({type: "sustain", at: 0, until: k.end, contour: k, swell: o.mode === "swell", level: 2.2});
+        end = k.end + 0.1;
+      }
+      timer = setTimeout(function(){ if(g === gen) self.stop(); }, (START_DELAY + end) * 1000);
+    }).catch(function(){
+      if(g !== gen) return;
+      halt(false); stale = true;
+      emit({status: "idle", failed: true});
+    });
+  };
+}
+
+global.StrawAudio = {
+  Engine: Engine,
+  Core: {COUNT_IN: COUNT_IN, buildPlan: buildPlan, locate: locate, timing: timing, contour: contour, midiAt: midiAt,
+         midiToHz: midiToHz, hzToMidi: hzToMidi, noteName: noteName, scaleSlots: scaleSlots,
+         createKit: createKit, createMixer: createMixer, createSession: createSession, scheduleEvent: scheduleEvent}
+};
+})(window);
+</script>
+
 <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.8/babel.min.js" integrity="sha384-Ux6uBqExf/7ahsSNrA9VI7vuaw6sKjDoVdjdUxmIoL2qdlzFVZ157sTi6JK3Z9Q8" crossorigin="anonymous"></script>
