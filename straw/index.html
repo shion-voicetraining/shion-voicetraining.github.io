@@ -19,8 +19,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>
   :root{
     --bg:#f2ede8; --surface:#f8f3ee; --card:#ffffff; --ink:#1a1714; --ink2:#06060e;
-    --muted:#7a6d64; --line:#e5ddd3;
-    --teal:#0891b2; --teal-l:#62c0d8; --wine:#b83060; --wine-d:#7d1a38; --pink:#e05c7a;
+    --muted:#65594f; --line:#e5ddd3;
+    --teal:#0e7490; --teal-l:#62c0d8; --wine:#b83060; --wine-d:#7d1a38; --pink:#e05c7a;
     --amber:#b06800; --amber-l:#f5a623; --green:#1e7a42;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -98,21 +98,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line);}
   .btn-tone{background:var(--teal);color:#fff;}
 
-  .runner{text-align:center;padding:8px 0 2px;}
-  .runner .phase{font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
-  .runner .phase.work{color:var(--wine);}
-  .runner .phase.rest{color:var(--teal);}
-  .runner .phase.done{color:var(--green);}
-  .runner .big{font-size:52px;font-weight:800;line-height:1.1;margin:2px 0;font-variant-numeric:tabular-nums;}
-  .runner .rep{font-size:13px;color:var(--muted);margin-bottom:12px;}
-  .ring{width:100%;height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin:6px 0 14px;}
-  .ring>i{display:block;height:100%;background:var(--wine);transition:width 1s linear;}
-  .runner .phase.rest ~ .ring>i,.ring.rest>i{background:var(--teal);}
-
-  .dynmeter{width:100%;height:16px;background:var(--line);border-radius:999px;overflow:hidden;}
-  .dynmeter>i{display:block;height:100%;border-radius:999px;
-    background:linear-gradient(90deg,var(--amber-l),var(--wine));transition:width .9s linear;}
-
   .round{width:100%;text-align:left;margin-bottom:8px;border:1px solid var(--line);border-radius:12px;
     padding:12px 13px;display:flex;gap:10px;align-items:flex-start;color:var(--ink);}
 
@@ -129,6 +114,105 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   nav button .ic{font-size:19px;line-height:1;}
   nav button.on{color:var(--wine);}
   .foot{font-size:11px;color:var(--muted);text-align:center;padding:18px 20px 8px;line-height:1.7;}
+  button{touch-action:manipulation;min-height:44px;}
+  button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--teal);outline-offset:2px;}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+  /* メニュー */
+  .ex{scroll-margin-top:52px;}
+  .quick{border:2px solid var(--wine);}
+  .quick .k{font-size:12px;font-weight:800;color:var(--wine);}
+  .quick .t{font-size:17px;font-weight:800;line-height:1.4;}
+  .quick .m{font-size:13px;color:var(--muted);margin:2px 0 12px;}
+  .btn-big{min-height:60px;font-size:18px;width:100%;border-radius:14px;}
+  .ex .btnrow{flex-wrap:wrap;}
+
+  /* 設定 */
+  details.settings summary .sum{display:block;font-size:12px;color:var(--muted);font-weight:400;}
+  .opt{padding:11px 0;border-top:1px solid var(--line);}
+  .opt>.name{display:block;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .opt .note{font-size:12px;color:var(--muted);margin-top:3px;}
+  .stepper{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 0;}
+  .stepper .name{font-size:13.5px;font-weight:700;}
+  .stepper .ctl{display:flex;align-items:center;gap:4px;}
+  .stepper button{width:44px;padding:0;font-size:22px;}
+  .stepper button:disabled{opacity:.35;cursor:default;}
+  .stepper output{min-width:78px;text-align:center;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;}
+  input[type=range]{display:block;width:100%;height:44px;margin:0;accent-color:var(--wine);}
+  .vol{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--ink);}
+  .vol>span{flex:0 0 64px;}
+  .vol>b{flex:0 0 30px;text-align:right;font-variant-numeric:tabular-nums;}
+  .choices{display:flex;gap:6px;margin-top:7px;}
+  .choices button{flex:1;padding:6px 3px;font-size:12.5px;line-height:1.3;background:var(--surface);color:var(--ink);border:1px solid var(--line);}
+  .choices button[aria-pressed=true]{background:var(--wine);color:#fff;border-color:var(--wine);}
+  .switch{display:flex;align-items:center;gap:10px;min-height:44px;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .switch input{width:24px;height:24px;accent-color:var(--wine);}
+  .notice{font-size:13px;color:var(--wine-d);background:#fbe9ee;border-radius:10px;padding:9px 11px;margin-bottom:10px;}
+
+  /* 練習中：全画面。停止は常に画面下 */
+  .player{--pc:var(--muted);position:fixed;top:0;right:0;bottom:0;left:0;z-index:40;display:flex;flex-direction:column;
+    background:var(--bg);overflow:hidden;outline:none;}
+  .player.prep{--pc:#935600;background:#fbf0dc;}
+  .player.work{--pc:var(--wine);background:#f8e3ea;}
+  .player.rest{--pc:var(--teal);background:#e0f0f4;}
+  .player.done{--pc:var(--green);background:#e4f2e8;}
+  .player.paused{--pc:#4d4640;background:#e6e1dc;}
+  .player .safety{flex:none;padding-top:calc(7px + env(safe-area-inset-top));}
+  .ptop{flex:none;width:100%;max-width:520px;margin:0 auto;padding:8px 18px 0;text-align:center;}
+  .ptop .t{font-size:14px;font-weight:800;line-height:1.35;}
+  .ptop .r{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .pmain{flex:1;min-height:0;width:100%;max-width:520px;margin:0 auto;padding:4px 18px;overflow-y:auto;
+    display:flex;flex-direction:column;align-items:center;}
+  .pmain>:first-child{margin-top:auto;}
+  .pmain>:last-child{margin-bottom:auto;}
+  .phead{text-align:center;flex:none;}
+  .phase{display:inline-block;font-size:24px;font-weight:900;line-height:1.3;color:#fff;background:var(--pc);padding:3px 22px;border-radius:999px;}
+  .instr{font-size:15px;font-weight:700;color:var(--pc);margin-top:5px;}
+  .dial{position:relative;flex:none;width:min(62vw,33vh,260px);height:min(62vw,33vh,260px);margin:8px 0;}
+  .dial svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .dial .track{fill:rgba(255,255,255,.65);stroke:rgba(0,0,0,.08);stroke-width:12;}
+  .dial .bar{fill:none;stroke:var(--pc);stroke-width:12;}
+  .dial .in{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;}
+  .dial .num{font-size:min(19vw,10.5vh,82px);font-weight:900;color:var(--pc);font-variant-numeric:tabular-nums;line-height:1;}
+  .dial .unit{font-size:13px;font-weight:700;color:var(--muted);margin-top:4px;}
+  .pside{flex:none;width:100%;max-width:340px;text-align:center;}
+  .beats{display:flex;justify-content:center;align-items:center;gap:13px;height:26px;}
+  .beats i{width:15px;height:15px;border-radius:50%;border:2px solid var(--pc);}
+  .beats i:first-child{width:22px;height:22px;}
+  .beats i.on{background:var(--pc);}
+  .readout{display:flex;justify-content:center;gap:28px;margin:4px 0 2px;}
+  .readout span{display:block;font-size:11px;color:var(--muted);}
+  .readout b{display:block;font-size:20px;line-height:1.25;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .path{display:block;width:100%;height:min(9vh,62px);}
+  .pathlabel{font-size:11px;color:var(--muted);}
+  .pbottom{flex:none;width:100%;max-width:520px;margin:0 auto;padding:8px 18px calc(12px + env(safe-area-inset-bottom));}
+  .pbottom .btnrow button{flex:1;min-height:64px;font-size:18px;border-radius:16px;}
+  .btn-go{background:var(--wine);color:#fff;}
+  .btn-stop{background:var(--ink);color:#fff;}
+  .btn-pause{background:#fff;color:var(--ink);border:2px solid var(--pc);}
+  .voltoggle{display:block;margin:0 auto;background:none;color:var(--ink);font-size:13px;padding:4px 14px;text-decoration:underline;}
+  .volpanel{background:#fff;border-radius:12px;padding:0 12px;}
+  @media (max-height:610px) and (orientation:portrait){
+    .phase{font-size:19px;} .instr{font-size:13px;margin-top:2px;} .readout b{font-size:17px;}
+    .player .safety{font-size:11px;padding-top:4px;padding-bottom:4px;}
+    .pbottom .btnrow button{min-height:56px;}
+    .dial{width:28vh;height:28vh;margin:4px 0;} .pathlabel{display:none;} .path{height:36px;}
+  }
+  @media (orientation:landscape) and (max-height:500px){
+    .player .safety{font-size:11px;padding:3px;}
+    .ptop,.pmain,.pbottom{max-width:760px;}
+    .ptop{padding-top:2px;display:flex;justify-content:center;align-items:baseline;gap:14px;}
+    .pmain{display:grid;grid-template-columns:auto 1fr;align-content:center;align-items:center;column-gap:22px;}
+    .pmain>:first-child,.pmain>:last-child{margin:0;}
+    .phead{grid-column:2;grid-row:1;} .pside{grid-column:2;grid-row:2;justify-self:center;}
+    .dial{grid-column:1;grid-row:1/3;width:44vh;height:44vh;margin:0;}
+    .dial .num{font-size:15vh;}
+    .phase{font-size:18px;} .instr{font-size:13px;margin:0;} .path{height:10vh;}
+    .pbottom{display:flex;gap:8px;align-items:center;padding-top:3px;padding-bottom:calc(6px + env(safe-area-inset-bottom));}
+    .pbottom .btnrow{flex:1;order:-1;} .pbottom .btnrow button{min-height:50px;}
+    .voltoggle{margin:0;} .volpanel{position:absolute;left:18px;right:18px;bottom:66px;}
+  }
+  @media (prefers-reduced-motion:reduce){.bub{animation:none;opacity:.8;}}
 </style>
 </head>
 <body>
@@ -517,7 +601,15 @@ function Engine(){
     } else mixer.set(volumes);
     var c = ctx, id;
     var timeout = new Promise(function(_, ng){ id = setTimeout(function(){ ng(new Error("resume timeout")); }, RESUME_TIMEOUT_MS); });
-    return Promise.race([c.resume(), timeout]).then(function(){ clearTimeout(id); return c; }, function(e){ clearTimeout(id); throw e; });
+    var resumed = c.resume(), from = c.currentTime, poll;
+    // resume完了＝音が出る、ではない（Bluetoothの立ち上がり・iOSの中断復帰）。時計が進むのを確かめてから始める
+    var moving = Promise.resolve(resumed).then(function(){
+      return new Promise(function(ok){
+        poll = setInterval(function(){ if(c.currentTime > from + 0.01){ clearInterval(poll); ok(); } }, 20);
+      });
+    });
+    function done(){ clearTimeout(id); clearInterval(poll); }
+    return Promise.race([moving, timeout]).then(function(){ done(); return c; }, function(e){ done(); throw e; });
   }
 
   function schedule(){
@@ -660,7 +752,7 @@ const {useState, useRef, useEffect} = React;
 
 /* ═══════════════════════════════════════════════════════════════
    ストロー発声トレーナー（SOVT / SVOT）— SHIONボイストレーニング教室
-   単一HTML + React(CDN) + Web Audio。ハモリトレーナーと同構成。
+   単一HTML + React(CDN) + Web Audio。ハモリトレーナーと同構成。音は #straw-engine に分離。
    ═══════════════════════════════════════════════════════════════ */
 
 /* ---------- Why：なぜSVOTが良いのか（メイン＝負担をかけにくい発声／サブ＝予防） ---------- */
@@ -800,113 +892,73 @@ const EXERCISES = [
    ]},
 ];
 
-/* ---------- Web Audio：お手本音 ---------- */
-function useAudio(){
-  // 【設計理由】お手本音を Web Audio（＝効果音扱い・iPhoneの消音モードで鳴らない）ではなく
-  //   HTMLの<audio>（＝音楽/動画と同じメディア再生）で鳴らす。これで消音モードでも鳴る（YouTube等と同じ）。
-  //   波形はその場でWAVに合成し data URI として<audio>に流し込む（外部音源ファイル不要・自己完結）。
-  const elRef = useRef(null);
-  const unlockedRef = useRef(false);
-  const SR = 16000; // 標本化周波数（お手本の最高倍音≒3kHz < 8kHz なので十分・データ量も軽い）
+/* ---------- 音源エンジンとの接続・練習設定（端末内に保存） ---------- */
+const Core = StrawAudio.Core;
+const SET_KEY = "straw_trainer_settings_v1";
+const DEFAULTS = {bpm:60, transpose:0, guide:"sustain", silent:false, master:90, click:70, pitch:80, reps:{}, lastId:null};
+const GUIDES = [
+  {id:"sustain", name:"発声中も持続", note:"目標音が小さく鳴り続けます（標準）"},
+  {id:"before",  name:"開始前のみ",   note:"準備中に目標音を聞き、発声中はクリックだけで練習します"},
+  {id:"every4",  name:"4拍ごと",      note:"発声中、4拍ごとに目標音を鳴らし直します"},
+];
+function intIn(v, min, max, fallback){
+  return typeof v === "number" && isFinite(v) ? Math.max(min, Math.min(max, Math.round(v))) : fallback;
+}
+// 保存値が壊れていても起動できるよう、項目ごとに検証して読む
+function loadSettings(){
+  let raw = null;
+  try{ raw = JSON.parse(localStorage.getItem(SET_KEY)); }catch(e){}
+  const v = raw && typeof raw === "object" ? raw : {};
+  const reps = {};
+  EXERCISES.forEach(ex=>{
+    if(ex.mode==="phrase" || !v.reps) return;
+    const n = intIn(v.reps[ex.id], 1, 10, null);
+    if(n) reps[ex.id] = n;
+  });
+  return {
+    bpm: intIn(v.bpm, 40, 120, DEFAULTS.bpm),
+    transpose: intIn(v.transpose, -12, 12, DEFAULTS.transpose),
+    guide: GUIDES.some(g=>g.id===v.guide) ? v.guide : DEFAULTS.guide,
+    silent: v.silent === true,
+    master: intIn(v.master, 0, 100, DEFAULTS.master),
+    click: intIn(v.click, 0, 100, DEFAULTS.click),
+    pitch: intIn(v.pitch, 0, 100, DEFAULTS.pitch),
+    reps,
+    lastId: EXERCISES.some(e=>e.id===v.lastId) ? v.lastId : null,
+  };
+}
+function volumesOf(s){ return {master:s.master, click:s.click, guide:s.pitch}; }
+function baseMidi(ex, s){ return Core.hzToMidi(ex.toneHz) + s.transpose; }
+function repsOf(ex, s){ return s.reps[ex.id] || ex.reps; }
+function noteText(m){ const n = Core.noteName(m); return n.kana + " " + n.abc; }
+function semitoneText(n){ return n===0 ? "標準" : (n>0 ? "+" : "−") + Math.abs(n) + "半音"; }
+function rangeText(ex, s){
+  const m = baseMidi(ex, s);
+  if(ex.semitone) return noteText(m) + "から半音ずつ";
+  if(ex.toneMode==="glideUpDown") return noteText(m) + " 〜 " + noteText(m+12);
+  if(ex.toneMode==="glide2oct") return noteText(m) + " 〜 " + noteText(m+24);
+  return noteText(m);
+}
+function secText(sec){ return String(Math.round(sec*10)/10); }
+function clockText(sec){ const n = Math.max(0, Math.ceil(sec - 0.02)); return Math.floor(n/60) + ":" + String(n%60).padStart(2,"0"); }
 
-  function el(){
-    if(!elRef.current){
-      const a = document.createElement("audio");
-      a.setAttribute("playsinline", "");
-      a.preload = "auto";
-      a.style.display = "none";
-      try{ document.body.appendChild(a); }catch(e){}
-      elRef.current = a;
-    }
-    return elRef.current;
-  }
-
-  // Float32サンプル列 → 16bit PCM mono WAV の data URI に変換
-  function wavUri(samples){
-    const n = samples.length;
-    const buf = new ArrayBuffer(44 + n*2);
-    const dv = new DataView(buf);
-    const ws = (off,s)=>{ for(let i=0;i<s.length;i++) dv.setUint8(off+i, s.charCodeAt(i)); };
-    ws(0,"RIFF"); dv.setUint32(4, 36+n*2, true); ws(8,"WAVE");
-    ws(12,"fmt "); dv.setUint32(16,16,true); dv.setUint16(20,1,true); dv.setUint16(22,1,true);
-    dv.setUint32(24,SR,true); dv.setUint32(28,SR*2,true); dv.setUint16(32,2,true); dv.setUint16(34,16,true);
-    ws(36,"data"); dv.setUint32(40,n*2,true);
-    let off=44;
-    for(let i=0;i<n;i++){ let v=Math.max(-1,Math.min(1,samples[i])); dv.setInt16(off, v<0? v*32768 : v*32767, true); off+=2; }
-    const bytes = new Uint8Array(buf); let bin=""; const step=0x8000;
-    for(let i=0;i<bytes.length;i+=step){ bin += String.fromCharCode.apply(null, bytes.subarray(i, i+step)); }
-    return "data:audio/wav;base64," + btoa(bin);
-  }
-
-  // お手本音を合成（トライアングル＝奇数倍音3本でスマホの小型スピーカーでも聞こえやすく）
-  function synth(hz, durSec, mode){
-    const n = Math.max(1, Math.floor(SR*durSec));
-    const out = new Float32Array(n);
-    const peak = 0.7;
-    const ratios = [1, 9/8, 5/4, 4/3, 3/2, 4/3, 5/4, 9/8, 1];
-    const norm = 1 + 1/9 + 1/25;
-    const twoPI = Math.PI*2, dt = 1/SR;
-    let phase = 0;
-    for(let i=0;i<n;i++){
-      const t = i*dt, p = durSec>0 ? t/durSec : 0;
-      let f = hz;
-      if(mode==="glideUpDown") f = p<0.5 ? hz*(1+2*p) : hz*(1+2*(1-p));
-      else if(mode==="glideUp") f = hz*(1+p);
-      else if(mode==="glide2oct") f = p<0.6 ? hz*(1+3*(p/0.6)) : hz*(4-3*((p-0.6)/0.4));
-      else if(mode==="scale"){ let idx=Math.floor(p*ratios.length); if(idx>=ratios.length) idx=ratios.length-1; f=hz*ratios[idx]; }
-      const s = (Math.sin(phase) + (1/9)*Math.sin(3*phase) + (1/25)*Math.sin(5*phase)) / norm;
-      let a;
-      if(mode==="swell"){ a = 1 - Math.abs(2*p-1); }            // 小→大→小（強弱お手本）
-      else {
-        const atk=0.03, rel=0.08;
-        if(t<atk) a = t/atk;
-        else if(t > durSec-rel) a = Math.max(0,(durSec-t)/rel);
-        else a = 1;
-      }
-      out[i] = peak * a * s;
-      phase += twoPI * f * dt;
-    }
-    return wavUri(out);
-  }
-
-  function ensure(){
-    const a = el();
-    if(!unlockedRef.current){
-      unlockedRef.current = true;
-      // 初回ユーザー操作中に無音を一度メディア再生して解錠（以降はタイマーからの自動再生も鳴る）
-      try{ a.src = wavUri(new Float32Array(Math.floor(SR*0.05))); const pr=a.play(); if(pr&&pr.catch) pr.catch(()=>{}); }catch(e){}
-    }
-    return a;
-  }
-
-  function play(hz, durSec, mode){
-    if(!hz || mode==="none") return;
-    const a = ensure();
-    try{
-      a.src = synth(hz, durSec, mode);
-      a.currentTime = 0;
-      const pr = a.play(); if(pr&&pr.catch) pr.catch(()=>{});
-    }catch(e){}
-  }
-
-  function stop(){
-    const a = elRef.current;
-    if(a){ try{ a.pause(); }catch(e){} }
-  }
-
-  // 最初の画面タップ／タッチでメディア再生を解錠しておく（お手本より前に鳴る準備）
+function useEngine(){
+  const [engine] = useState(()=> new StrawAudio.Engine());
+  const [state, setState] = useState(engine.state);
   useEffect(()=>{
-    const unlock = ()=>{ try{ ensure(); }catch(e){} };
-    document.addEventListener("pointerdown", unlock, {once:true});
-    document.addEventListener("touchend", unlock, {once:true});
+    const off = engine.subscribe(setState);
+    // 画面を離れたら一時停止（気づかないまま鳴り続けない／iOSの中断からも安全に復帰）
+    const vis = ()=>{ if(document.hidden) engine.hidden(); };
+    const leave = ()=> engine.hidden();
+    document.addEventListener("visibilitychange", vis);
+    window.addEventListener("pagehide", leave);
     return ()=>{
-      document.removeEventListener("pointerdown", unlock);
-      document.removeEventListener("touchend", unlock);
-      stop();
+      off(); engine.stop();
+      document.removeEventListener("visibilitychange", vis);
+      window.removeEventListener("pagehide", leave);
     };
-  },[]);
-
-  return {play, stop, ensure};
+  },[engine]);
+  return [engine, state];
 }
 
 /* ---------- アクセス・フィードバック収集（GAS → Googleスプレッドシート） ---------- */
@@ -930,115 +982,275 @@ function logEvent(type, payload){
 const LS_KEY = "straw_trainer_log_v1";
 function todayStr(){ return new Date().toLocaleDateString("sv-SE"); } // YYYY-MM-DD(ローカル)
 function loadLog(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {last:"", streak:0}; }
-  catch(e){ return {last:"", streak:0}; }
+  try{
+    const v = JSON.parse(localStorage.getItem(LS_KEY));
+    if(v && typeof v.last === "string") return {last:v.last, streak:Number(v.streak) || 0};
+  }catch(e){}
+  return {last:"", streak:0};
 }
+function yesterdayStr(){ const d = new Date(); d.setDate(d.getDate()-1); return d.toLocaleDateString("sv-SE"); }
+// 昨日も今日も練習していなければ、連続は途切れている
+function currentStreak(log){ return (log.last===todayStr() || log.last===yesterdayStr()) ? log.streak : 0; }
 function markDone(){
   const log = loadLog();
   const today = todayStr();
   if(log.last === today) return log; // 今日は記録済み
-  const yesterday = new Date(Date.now()-86400000).toLocaleDateString("sv-SE");
+  const yesterday = yesterdayStr();
   const next = {last:today, streak: log.last===yesterday ? (log.streak||0)+1 : 1};
   try{ localStorage.setItem(LS_KEY, JSON.stringify(next)); }catch(e){}
   return next;
 }
 
-/* ---------- タイマー（1種目の実行） ---------- */
-function Runner({ex, audio, onDone}){
-  // st: {phase:'idle'|'work'|'rest'|'done', rep, sec}
-  const st = useRef({phase:"idle", rep:0, sec:0});
-  const [,setV] = useState(0);
-  const timerRef = useRef(null);
-  const render = ()=> setV(v=>v+1);
-
-  function clearTimer(){ if(timerRef.current){ clearInterval(timerRef.current); timerRef.current=null; } }
-
-  function repHz(rep){
-    // semitone: 1本ごとに半音（周波数比 2^(1/12)）上げる
-    return ex.semitone ? ex.toneHz * Math.pow(2,(rep-1)/12) : ex.toneHz;
-  }
-  function startWork(rep){
-    st.current = {phase:"work", rep, sec:ex.workSec};
-    audio.play(repHz(rep), ex.workSec, ex.toneMode);
-    render();
-  }
-  function tick(){
-    const s = st.current;
-    if(s.sec > 1){ st.current = {...s, sec:s.sec-1}; render(); return; }
-    // フェーズ終了
-    if(s.phase === "work"){
-      audio.stop();
-      if(s.rep >= ex.reps){
-        clearTimer();
-        st.current = {phase:"done", rep:s.rep, sec:0}; render();
-        onDone();
-        logEvent("complete", {id:ex.id, title:ex.title});
-      } else if(ex.restSec > 0){
-        st.current = {phase:"rest", rep:s.rep, sec:ex.restSec}; render();
-      } else {
-        startWork(s.rep+1);
-      }
-    } else if(s.phase === "rest"){
-      startWork(s.rep+1);
-    }
-  }
-  function begin(){
-    audio.ensure();      // ユーザー操作の中でAudioContextを起こす
-    clearTimer();
-    startWork(1);
-    timerRef.current = setInterval(tick, 1000);
-  }
-  function reset(){
-    clearTimer(); audio.stop();
-    st.current = {phase:"idle", rep:0, sec:0}; render();
-  }
-  useEffect(()=>()=>{ clearTimer(); audio.stop(); },[]);
-
-  const s = st.current;
-  if(s.phase === "idle"){
-    return (
-      <div className="btnrow">
-        <button className="btn-primary" onClick={begin}>▶ スタート（{ex.reps}本）</button>
-        {ex.toneMode!=="none" &&
-          <button className="btn-tone" onClick={()=>audio.play(ex.toneHz, Math.min(ex.workSec,6), ex.toneMode)}>♪ お手本</button>}
+/* ---------- 設定部品 ---------- */
+function Stepper({name, value, min, max, format, onChange}){
+  return (
+    <div className="stepper">
+      <span className="name">{name}</span>
+      <span className="ctl">
+        <button className="btn-ghost" aria-label={name+"を下げる"} disabled={value<=min} onClick={()=>onChange(value-1)}>−</button>
+        <output aria-live="polite">{format ? format(value) : value}</output>
+        <button className="btn-ghost" aria-label={name+"を上げる"} disabled={value>=max} onClick={()=>onChange(value+1)}>＋</button>
+      </span>
+    </div>
+  );
+}
+function VolumeSliders({settings, update}){
+  return [["master","全体"],["click","クリック"],["pitch","音程"]].map(([key,label])=>(
+    <label className="vol" key={key}>
+      <span>{label}</span>
+      <input type="range" min="0" max="100" value={settings[key]} aria-label={label+"の音量"}
+        onChange={e=>update({[key]:Number(e.target.value)})}/>
+      <b>{settings[key]}</b>
+    </label>
+  ));
+}
+function SettingsPanel({engine, state, settings, update}){
+  const checking = state.status==="demo" && state.id==="check";
+  const guide = GUIDES.find(g=>g.id===settings.guide);
+  return (
+    <details className="tb settings">
+      <summary>
+        <span>⚙ 練習の設定
+          <span className="sum">BPM {settings.bpm}・音程 {semitoneText(settings.transpose)}・{settings.silent ? "画面だけ" : guide.name}</span>
+        </span>
+        <span className="arw">▶</span>
+      </summary>
+      <div className="body">
+        <div className="opt">
+          <Stepper name="テンポ（BPM）" value={settings.bpm} min={40} max={120} onChange={v=>update({bpm:v})}/>
+          <input type="range" min="40" max="120" value={settings.bpm} aria-label="テンポ（BPM）"
+            onChange={e=>update({bpm:Number(e.target.value)})}/>
+          <div className="note">テンポを変えても発声時間はほぼ同じです（拍に合わせて1秒未満の調整が入ります）。</div>
+        </div>
+        <div className="opt">
+          <Stepper name="音程（全種目）" value={settings.transpose} min={-12} max={12} format={semitoneText} onChange={v=>update({transpose:v})}/>
+          <div className="note">ラクに出せる高さに合わせてください。届かない高さは無理に出さないでください。</div>
+        </div>
+        <div className="opt">
+          <span className="name">音程ガイド</span>
+          <div className="choices">
+            {GUIDES.map(g=>(
+              <button key={g.id} aria-pressed={settings.guide===g.id} onClick={()=>update({guide:g.id})}>{g.name}</button>
+            ))}
+          </div>
+          <div className="note">{guide.note}</div>
+        </div>
+        <div className="opt">
+          <span className="name">音量</span>
+          <VolumeSliders settings={settings} update={update}/>
+          <button className="btn-tone" style={{width:"100%"}}
+            onClick={()=> checking ? engine.stop() : engine.demo({id:"check", sound:"check", bpm:settings.bpm, midi:57+settings.transpose, volumes:volumesOf(settings)})}>
+            {checking ? "■ 止める" : "♪ 音を確認（クリック・音程・ベル）"}
+          </button>
+        </div>
+        <div className="opt">
+          <label className="switch">
+            <input type="checkbox" checked={settings.silent} onChange={e=>update({silent:e.target.checked})}/>
+            音を出さず、画面だけで練習する
+          </label>
+        </div>
+        <button className="btn-ghost" style={{width:"100%"}}
+          onClick={()=>update(Object.assign({}, DEFAULTS, {reps:{}, lastId:settings.lastId}))}>設定を最初の状態に戻す</button>
       </div>
+    </details>
+  );
+}
+
+/* ---------- 練習中の画面 ---------- */
+// 音程（強弱種目では音量）の動きを線で見せる＝音なしでも練習できる
+function GuidePath({ex, contour, t}){
+  const swell = ex.toneMode==="swell";
+  const pts = swell ? [[0,0],[contour.end/2,1],[contour.end,0]] : contour.points;
+  const values = pts.map(p=>p[1]);
+  const lo = Math.min.apply(null, values), span = Math.max.apply(null, values) - lo;
+  const x = sec => 10 + 280*sec/contour.end;
+  const y = v => span ? 52 - 42*(v-lo)/span : 31;
+  let d = "M" + x(0) + " " + y(values[0]);
+  pts.slice(1).forEach(p=>{
+    d += (!swell && contour.step) ? " H" + x(p[0]) + " V" + y(p[1]) : " L" + x(p[0]) + " " + y(p[1]);
+  });
+  if(!swell && contour.step) d += " H" + x(contour.end);
+  const now = swell ? Math.max(0, 1 - Math.abs(2*t/contour.end - 1)) : Core.midiAt(contour, t);
+  return (
+    <>
+      <svg className="path" viewBox="0 0 300 62" aria-hidden="true">
+        <path d={d} fill="none" stroke="var(--pc)" strokeOpacity=".4" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx={x(t)} cy={y(now)} r="8" fill="var(--pc)"/>
+      </svg>
+      <div className="pathlabel">{swell ? "声の大きさ：小 → 大 → 小" : "音の高さの動き"}</div>
+    </>
+  );
+}
+
+const PHASES = {
+  prep: {name:"準備", text:"目標の音を聞いて、息を吸う"},
+  work: {name:"発声", text:"ストローで「ウー」"},
+  rest: {name:"休憩", text:"力を抜いて、ひと休み"},
+};
+
+function Player({engine, state, settings, update}){
+  const [,setFrame] = useState(0);
+  const [showVol, setShowVol] = useState(false);
+  const boxRef = useRef(null);
+  const {status, job, plan} = state;
+
+  useEffect(()=>{
+    if(status!=="running") return;
+    let id;
+    const loop = ()=>{ setFrame(f=>f+1); id = requestAnimationFrame(loop); };
+    id = requestAnimationFrame(loop);
+    return ()=> cancelAnimationFrame(id);
+  },[status]);
+
+  // 背面を操作・読み上げ対象から外す
+  useEffect(()=>{
+    const root = document.getElementById("root");
+    const back = document.activeElement;
+    root.inert = true;
+    document.body.style.overflow = "hidden";
+    boxRef.current.focus();
+    return ()=>{
+      root.inert = false;
+      document.body.style.overflow = "";
+      if(back && back.isConnected) back.focus({preventScroll:true});
+    };
+  },[]);
+
+  const ex = job.ex;
+  const ended = status==="done", halted = status==="paused" || status==="error";
+  let look = "done", body;
+
+  if(ended){
+    body = (
+      <>
+        <div className="phead"><span className="phase" role="status">完了</span></div>
+        <div style={{fontSize:"32px",fontWeight:900,margin:"22px 0 6px",color:"var(--green)"}}>お疲れさま！</div>
+        <div style={{fontSize:"14px"}}>今日の練習を記録しました 🎉</div>
+      </>
+    );
+  } else {
+    const t = status==="running" ? Math.min(plan.total, Math.max(0, engine.position())) : status==="paused" ? state.at : 0;
+    const loc = Core.locate(plan, t), ph = loc.phase;
+    const next = plan.phases.find(p=>p.kind==="work" && p.end > t) || plan.phases[plan.phases.length-1];
+    const inWork = ph.kind==="work";
+    const workT = inWork ? loc.into : 0;
+    const note = Math.round(Core.midiAt(next.contour, workT));
+    const beatsLeft = ph.beats - loc.beat;
+    look = halted ? "paused" : ph.kind;
+
+    let title = PHASES[ph.kind].name, text = PHASES[ph.kind].text;
+    if(ph.kind==="prep" && job.silent) text = "数に合わせて、息を吸う";
+    if(inWork && ex.dynamics){
+      const inten = Math.max(0, 1 - Math.abs(2*loc.progress - 1));
+      text = inten>0.66 ? "強く！" : inten>0.33 ? (loc.progress<0.5 ? "だんだん強く" : "だんだん弱く") : "弱く";
+    }
+    if(inWork && ex.water) text += "・泡を一定に";
+    if(status==="starting") text = "音を準備しています…";
+    if(status==="paused"){
+      title = "一時停止";
+      text = state.reason==="interrupted" ? "音が中断されました。再開を押してください"
+        : "再開すると、準備4拍から" + job.from + "本目を始めます";
+    }
+    if(status==="error"){ title = "音が出せません"; text = "もう一度試すか、画面だけで練習できます"; }
+
+    const R = 92, len = 2*Math.PI*R;
+    body = (
+      <>
+        <div className="phead">
+          <span className="phase" role="status">{title}</span>
+          <div className="instr">{text}</div>
+        </div>
+        <div className="dial">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle className="track" cx="100" cy="100" r={R}/>
+            <circle className="bar" cx="100" cy="100" r={R} strokeDasharray={len} strokeDashoffset={len*(1-loc.progress)}/>
+          </svg>
+          <div className="in">
+            <span className="num">{ph.kind==="prep" ? beatsLeft : Math.max(1, Math.ceil(loc.left - 0.02))}</span>
+            <span className="unit">{ph.kind==="prep" ? "拍後に発声" : "残り秒"}</span>
+          </div>
+        </div>
+        <div className="pside">
+          <div className="beats" aria-hidden="true">
+            {[0,1,2,3].map(i=><i key={i} className={status==="running" && loc.beat%4===i ? "on" : ""}/>)}
+          </div>
+          <div className="readout">
+            <div><span>{inWork ? "いまの音" : "次の音"}</span><b className="now-note">{noteText(note)}</b></div>
+            <div><span>拍</span><b className="now-beat">{loc.beat+1} / {ph.beats}</b></div>
+            <div><span>全体の残り</span><b>{clockText(plan.total - t)}</b></div>
+          </div>
+          <GuidePath ex={ex} contour={next.contour} t={workT}/>
+        </div>
+      </>
     );
   }
-  const total = s.phase==="rest" ? ex.restSec : ex.workSec;
-  const pct = total ? Math.round((s.sec/total)*100) : 0;
-  const phaseLabel = s.phase==="work" ? "発声" : s.phase==="rest" ? "休憩" : "完了";
+
+  const current = ended ? job.reps : (status==="running"
+    ? Core.locate(plan, engine.position()).phase.rep : job.from);
+
+  return ReactDOM.createPortal(
+    <div className={"player "+look} role="dialog" aria-modal="true" aria-label={ex.title+"の練習"} tabIndex="-1" ref={boxRef}
+      onKeyDown={e=>{ if(e.key==="Escape"){ if(status==="running") engine.pause(); else engine.stop(); } }}>
+      <div className="safety">⚠️ 痛み・違和感が出たら、すぐに中止してください</div>
+      <div className="ptop">
+        <div className="t">{ex.id}. {ex.title}</div>
+        <div className="r">{current} / {job.reps} 本目　BPM {job.bpm}{job.silent ? "　画面だけ" : ""}</div>
+      </div>
+      <div className="pmain">{body}</div>
+      <div className="pbottom">
+        {!ended && !job.silent && showVol && <div className="volpanel"><VolumeSliders settings={settings} update={update}/></div>}
+        {!ended && !job.silent && status!=="error" &&
+          <button className="voltoggle" aria-expanded={showVol} onClick={()=>setShowVol(v=>!v)}>{showVol ? "音量を閉じる" : "音量"}</button>}
+        {status==="error" && <button className="voltoggle" onClick={()=>engine.resume(true)}>音なし（画面だけ）で練習する</button>}
+        <div className="btnrow">
+          {(status==="running" || status==="starting") && <button key="pause" className="btn-pause" onClick={()=>engine.pause()}>Ⅱ 一時停止</button>}
+          {halted && <button key="resume" className="btn-go" onClick={()=>engine.resume()}>{status==="error" ? "もう一度試す" : "▶ 再開"}</button>}
+          {ended && <button key="again" className="btn-go" onClick={()=>engine.start(Object.assign({}, job, {from:1}))}>▶ もう一度</button>}
+          <button key="stop" className="btn-stop" onClick={()=>engine.stop()}>{ended ? "閉じる" : "■ 停止"}</button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+/* ---------- 種目を開いたとき ---------- */
+function Runner({ex, engine, state, settings, update, start}){
+  const reps = repsOf(ex, settings);
+  const demoing = state.status==="demo" && state.id===ex.id;
   return (
-    <div className="runner">
-      <div className={"phase "+s.phase}>{phaseLabel}</div>
-      {s.phase!=="done" ? (
-        <>
-          <div className="big">{s.sec}</div>
-          <div className="rep">
-            {s.rep} / {ex.reps} 本目
-            {ex.semitone && s.phase==="work" && <span style={{color:"var(--amber)",fontWeight:700}}>　♪ +{s.rep-1}半音</span>}
-          </div>
-          <div className={"ring"+(s.phase==="rest"?" rest":"")}><i style={{width:pct+"%"}}></i></div>
-          {ex.dynamics && s.phase==="work" && (function(){
-            const p = (ex.workSec - s.sec) / ex.workSec;      // 0→1
-            const inten = Math.max(0, 1 - Math.abs(2*p - 1));  // 三角波 0→1→0
-            const label = inten>0.66 ? "強く！" : inten>0.33 ? "だんだん…" : "弱く";
-            return (
-              <div style={{margin:"0 0 12px"}}>
-                <div style={{fontSize:"13px",fontWeight:800,color:"var(--wine)",marginBottom:"5px"}}>{label}</div>
-                <div className="dynmeter"><i style={{width:(18+inten*82)+"%"}}></i></div>
-                <div style={{fontSize:"11px",color:"var(--muted)",marginTop:"5px"}}>小 → 大 → 小（真ん中で最大）</div>
-              </div>
-            );
-          })()}
-          <div className="btnrow"><button className="btn-ghost" style={{flex:1}} onClick={reset}>■ ストップ</button></div>
-        </>
-      ) : (
-        <>
-          <div className="big" style={{fontSize:"38px"}}>お疲れさま！</div>
-          <div className="rep">今日の練習を記録しました 🎉</div>
-          <div className="btnrow"><button className="btn-ghost" style={{flex:1}} onClick={reset}>もう一度</button></div>
-        </>
-      )}
+    <div>
+      <Stepper name="音程" value={settings.transpose} min={-12} max={12} format={semitoneText} onChange={v=>update({transpose:v})}/>
+      <div style={{fontSize:"12px",color:"var(--muted)"}}>この種目の高さ：{rangeText(ex, settings)}</div>
+      <Stepper name="本数" value={reps} min={1} max={10} format={v=>v+"本"}
+        onChange={v=>update({reps:Object.assign({}, settings.reps, {[ex.id]:v})})}/>
+      <button className="btn-primary btn-big" style={{marginTop:"6px"}} onClick={()=>start(ex)}>▶ スタート（{reps}本）</button>
+      {ex.toneMode!=="none" &&
+        <button className="btn-tone" style={{width:"100%",marginTop:"8px"}}
+          onClick={()=> demoing ? engine.stop() : engine.demo({id:ex.id, bpm:settings.bpm, midi:baseMidi(ex, settings),
+            sec:Math.min(ex.workSec, 6), mode:ex.toneMode, volumes:volumesOf(settings)})}>
+          {demoing ? "■ 止める" : "♪ お手本"}
+        </button>}
     </div>
   );
 }
@@ -1048,21 +1260,18 @@ function PhraseRunner({ex, onDone}){
   const [done, setDone] = useState([false,false,false]);
   const firedRef = useRef(false);
   function toggle(i){
-    setDone(d=>{
-      const nd = d.slice(); nd[i] = !nd[i];
-      if(nd.every(Boolean) && !firedRef.current){
-        firedRef.current = true;
-        onDone();
-        logEvent("complete", {id:ex.id, title:ex.title});
-      }
-      return nd;
-    });
+    const nd = done.slice(); nd[i] = !nd[i];
+    setDone(nd);
+    if(nd.every(Boolean) && !firedRef.current){
+      firedRef.current = true;
+      onDone(ex);
+    }
   }
   const allDone = done.every(Boolean);
   return (
     <div>
       {ex.rounds.map((r,i)=>(
-        <button key={i} onClick={()=>toggle(i)} className="round"
+        <button key={i} onClick={()=>toggle(i)} className="round" aria-pressed={done[i]}
           style={{background: done[i] ? "#eaf6ee" : "var(--surface)",
                   borderColor: done[i] ? "var(--green)" : "var(--line)"}}>
           <span style={{color: done[i] ? "var(--green)" : "var(--muted)", fontWeight:900, fontSize:"16px"}}>{done[i] ? "✓" : "○"}</span>
@@ -1219,7 +1428,9 @@ function WhyScreen(){
   );
 }
 
-function HowtoScreen({audio}){
+function HowtoScreen({engine, state, settings}){
+  const refMidi = 57 + settings.transpose;
+  const demoing = state.status==="demo" && state.id==="ref";
   return (
     <div className="screen">
       <div className="lead">🥤 ストローの選び方（まずここから）</div>
@@ -1249,7 +1460,10 @@ function HowtoScreen({audio}){
           <div className="check" key={i}><span className="ic">✓</span><span>{c}</span></div>
         ))}
         <div className="btnrow" style={{marginTop:"12px"}}>
-          <button className="btn-tone" style={{flex:1}} onClick={()=>audio.play(220,4,"hold")}>♪ 基準音を鳴らす（この高さで）</button>
+          <button className="btn-tone" style={{flex:1}}
+            onClick={()=> demoing ? engine.stop() : engine.demo({id:"ref", bpm:60, midi:refMidi, sec:4, mode:"hold", volumes:volumesOf(settings)})}>
+            {demoing ? "■ 止める" : "♪ 基準音を鳴らす（" + noteText(refMidi) + "）"}
+          </button>
         </div>
       </div>
 
@@ -1268,18 +1482,38 @@ function HowtoScreen({audio}){
   );
 }
 
-function MenuScreen({audio, onDone}){
+function MenuScreen({engine, state, settings, update, start, onDone}){
   const [openId, setOpenId] = useState(null);
+  const cards = useRef({});
   const groups = [["beg","初級"],["mid","中級"],["adv","上級"]];
+  useEffect(()=>{
+    if(openId && cards.current[openId]) cards.current[openId].scrollIntoView({block:"start"});
+  },[openId]);
+  function toggle(id){ if(state.status==="demo") engine.stop(); setOpenId(id); }
+  const last = EXERCISES.find(e=>e.id===settings.lastId);
   return (
     <div className="screen">
+      {last && (
+        <div className="card quick">
+          <div className="k">前回の練習</div>
+          <div className="t">{last.id}. {last.title}</div>
+          <div className="m">{last.mode==="phrase" ? "サビ3回（カウントなし）"
+            : rangeText(last, settings) + "・BPM " + settings.bpm + "・" + repsOf(last, settings) + "本"}</div>
+          {last.mode==="phrase"
+            ? <button className="btn-primary btn-big" onClick={()=>toggle(last.id)}>前回の練習を開く</button>
+            : <button className="btn-primary btn-big" onClick={()=>start(last)}>▶ 前回の練習を始める</button>}
+        </div>
+      )}
+      {state.failed && <div className="notice" role="alert">音を再生できませんでした。もう一度タップするか、ページを再読み込みしてください。</div>}
+      <SettingsPanel engine={engine} state={state} settings={settings} update={update}/>
       {groups.map(([key,label])=>(
         <div key={key}>
           <div className="lead" style={{color:LV[key].color}}>{label}</div>
           {EXERCISES.filter(e=>e.lv===key).map(ex=>{
             const open = openId===ex.id;
+            const phrase = ex.mode==="phrase";
             return (
-              <div className="card ex" key={ex.id}>
+              <div className="card ex" key={ex.id} ref={el=>{ cards.current[ex.id] = el; }}>
                 <div className="exhead">
                   <span className="lv" style={{background:LV[ex.lv].color}}>{LV[ex.lv].name}</span>
                   <b style={{fontSize:"15px"}}>{ex.id}. {ex.title}</b>
@@ -1287,22 +1521,23 @@ function MenuScreen({audio, onDone}){
                 <div className="goal">{ex.goal}</div>
                 <div className="spec">
                   <span className="badge">🥤 {ex.straw}</span>
-                  <span className="badge">{ex.mode==="phrase" ? "🎵 サビ3回（カウントなし）" : "⏱ "+ex.workSec+"秒 × "+ex.reps+"本"}</span>
+                  <span className="badge">{phrase ? "🎵 サビ3回（カウントなし）"
+                    : "⏱ "+secText(Core.timing(ex, settings.bpm).workSec)+"秒 × "+repsOf(ex, settings)+"本"}</span>
                 </div>
                 {open ? (
                   <>
                     <div className="cue"><b>成功のサイン：</b>{ex.cue}</div>
-                    {ex.water && <div style={{marginBottom:"10px"}}><WaterStrawAnim/></div>}
-                    {ex.mode==="phrase"
+                    {phrase
                       ? <PhraseRunner ex={ex} onDone={onDone} />
-                      : <Runner ex={ex} audio={audio} onDone={onDone} />}
+                      : <Runner ex={ex} engine={engine} state={state} settings={settings} update={update} start={start} />}
+                    {ex.water && <div style={{marginTop:"10px"}}><WaterStrawAnim/></div>}
                     <div style={{textAlign:"center",marginTop:"10px"}}>
-                      <button className="btn-ghost" onClick={()=>setOpenId(null)} style={{fontSize:"12.5px",padding:"7px 14px"}}>閉じる</button>
+                      <button className="btn-ghost" onClick={()=>toggle(null)} style={{fontSize:"12.5px",padding:"7px 14px"}}>閉じる</button>
                     </div>
                   </>
                 ) : (
                   <div className="btnrow">
-                    <button className="btn-primary" onClick={()=>setOpenId(ex.id)}>開いて練習する</button>
+                    <button className="btn-primary" onClick={()=>toggle(ex.id)}>開いて練習する</button>
                   </div>
                 )}
               </div>
@@ -1351,11 +1586,11 @@ function FeedbackScreen(){
         <textarea value={text} onChange={e=>setText(e.target.value)} rows="4"
           placeholder="例：背圧の意味がわかった／基準音がもう少し低いと助かる など"
           style={{width:"100%",border:"1px solid var(--line)",borderRadius:"10px",padding:"10px",
-            fontFamily:"inherit",fontSize:"13px",resize:"vertical",color:"var(--ink)"}}/>
+            fontFamily:"inherit",fontSize:"16px",resize:"vertical",color:"var(--ink)"}}/>
         <p style={{fontSize:"13px",fontWeight:700,margin:"12px 0 6px"}}>お名前（任意）</p>
         <input value={name} onChange={e=>setName(e.target.value)} placeholder="ニックネームでもOK"
           style={{width:"100%",border:"1px solid var(--line)",borderRadius:"10px",padding:"10px",
-            fontFamily:"inherit",fontSize:"13px",color:"var(--ink)"}}/>
+            fontFamily:"inherit",fontSize:"16px",color:"var(--ink)"}}/>
         <button className="btn-primary" style={{width:"100%",marginTop:"16px",opacity:(!rating && !text.trim())?0.5:1}}
           onClick={submit} disabled={!rating && !text.trim()}>送信する</button>
         <p style={{fontSize:"11px",color:"var(--muted)",marginTop:"10px"}}>
@@ -1368,10 +1603,33 @@ function FeedbackScreen(){
 
 /* ---------- ルート ---------- */
 function App(){
-  const [tab, setTab] = useState("why");
   const [log, setLog] = useState(loadLog);
-  const audio = useAudio();
-  const onDone = ()=> setLog(markDone());
+  const [settings, setSettings] = useState(loadSettings);
+  // 初回は解説・注意点から。練習したことがある人はメニューから
+  const [tab, setTab] = useState(()=> (log.last || settings.lastId) ? "menu" : "why");
+  const [engine, state] = useEngine();
+
+  function update(patch){
+    setSettings(prev=>Object.assign({}, prev, patch));
+    const volumeOnly = Object.keys(patch).every(k=> k==="master" || k==="click" || k==="pitch");
+    if(!volumeOnly && engine.state.status==="demo") engine.stop();
+  }
+  useEffect(()=>{
+    try{ localStorage.setItem(SET_KEY, JSON.stringify(settings)); }catch(e){}
+    engine.setVolumes(volumesOf(settings));
+  },[settings]);
+
+  function onDone(ex){
+    setLog(markDone());
+    logEvent("complete", {id:ex.id, title:ex.title});
+    if(ex.mode==="phrase") update({lastId:ex.id});
+  }
+  // タップ処理の中から同期的に呼ぶこと（iPhoneの音声解禁条件）
+  function start(ex){
+    engine.start({ex, reps:repsOf(ex, settings), bpm:settings.bpm, transpose:settings.transpose, guide:settings.guide,
+      silent:settings.silent, volumes:volumesOf(settings), onComplete:()=>onDone(ex)});
+    update({lastId:ex.id});
+  }
 
   useEffect(()=>{ logEvent("access"); }, []);  // 起動時にアクセス記録（URL未設定なら無送信）
 
@@ -1382,6 +1640,7 @@ function App(){
     {id:"feedback", ic:"📝", label:"感想"},
   ];
   const isToday = log.last === todayStr();
+  const playing = ["starting","running","paused","done","error"].includes(state.status);
 
   return (
     <div className="app">
@@ -1390,14 +1649,14 @@ function App(){
         <h1>ストロー発声トレーナー <span style={{fontSize:"12px",color:"var(--muted)",fontWeight:400}}>β</span></h1>
         <p>SOVT（半閉鎖声道）で、力まない発声を毎日のセルフケアに。</p>
         <div className="streak">
-          🔥 <span>連続</span><b>{log.streak||0}</b><span>日</span>
+          🔥 <span>連続</span><b>{currentStreak(log)}</b><span>日</span>
           <span style={{color:"var(--muted)"}}>{isToday ? "／今日は達成 ✓" : "／今日はまだ"}</span>
         </div>
       </div>
 
       {tab==="why"      && <WhyScreen/>}
-      {tab==="how"      && <HowtoScreen audio={audio}/>}
-      {tab==="menu"     && <MenuScreen audio={audio} onDone={onDone}/>}
+      {tab==="how"      && <HowtoScreen engine={engine} state={state} settings={settings}/>}
+      {tab==="menu"     && <MenuScreen engine={engine} state={state} settings={settings} update={update} start={start} onDone={onDone}/>}
       {tab==="feedback" && <FeedbackScreen/>}
 
       <div className="foot">
@@ -1408,11 +1667,14 @@ function App(){
 
       <nav><div className="inner">
         {tabs.map(t=>(
-          <button key={t.id} className={tab===t.id?"on":""} onClick={()=>{audio.stop(); setTab(t.id);}}>
-            <span className="ic">{t.ic}</span>{t.label}
+          <button key={t.id} className={tab===t.id?"on":""} aria-current={tab===t.id?"page":undefined}
+            onClick={()=>{ engine.stop(); setTab(t.id); window.scrollTo(0,0); }}>
+            <span className="ic" aria-hidden="true">{t.ic}</span>{t.label}
           </button>
         ))}
       </div></nav>
+
+      {playing && <Player engine={engine} state={state} settings={settings} update={update}/>}
     </div>
   );
 }
